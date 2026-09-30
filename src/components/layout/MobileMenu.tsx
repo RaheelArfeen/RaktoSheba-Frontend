@@ -37,11 +37,6 @@ export default function MobileMenu() {
               Sign in
             </Link>
           </Button>
-          <Button asChild>
-            <Link href="/dashboard" onClick={close}>
-              Open workspace
-            </Link>
-          </Button>
         </div>
       </SheetContent>
     </Sheet>
