@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <section className="mx-auto flex min-h-[70vh] max-w-[1280px] flex-col justify-center px-5 py-20 sm:px-8 lg:px-10">
+    <section className="page-container flex min-h-[70vh] flex-col justify-center py-20">
       <p className="eyebrow text-blood">Blood, when it matters</p>
       <h1 className="animate-rise mt-6 max-w-[680px] font-display text-[clamp(3.5rem,7vw,6.7rem)] leading-[.91] tracking-[-.065em]">
         One small act.

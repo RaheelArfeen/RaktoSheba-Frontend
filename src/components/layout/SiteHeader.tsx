@@ -8,11 +8,11 @@ import MobileMenu from "./MobileMenu";
 export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 px-5 py-4 sm:px-8 lg:px-10">
+      <div className="page-container flex items-center justify-between gap-6 py-4">
         <Link href="/" aria-label="RaktoSheba home">
           <Mark />
         </Link>
-        <NavLinks className="hidden items-center gap-8 text-sm font-semibold text-ink-muted lg:flex" />
+        <NavLinks className="hidden lg:flex" />
         <div className="flex items-center gap-2">
           <Button asChild variant="soft" size="sm" className="hidden sm:inline-flex">
             <Link href="/emergency">
