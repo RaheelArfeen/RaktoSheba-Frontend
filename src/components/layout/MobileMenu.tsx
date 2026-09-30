@@ -25,7 +25,7 @@ export default function MobileMenu() {
         <Link href="/" onClick={close} aria-label="RaktoSheba home">
           <Mark />
         </Link>
-        <NavLinks onNavigate={close} className="mt-10 flex flex-col gap-5 text-lg font-bold text-ink-soft" />
+        <NavLinks variant="stack" onNavigate={close} className="mt-8" />
         <div className="mt-10 flex flex-col gap-3">
           <Button asChild variant="soft" className="justify-start rounded-2xl">
             <Link href="/emergency" onClick={close}>
