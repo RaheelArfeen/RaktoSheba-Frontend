@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CircleAlert } from "lucide-react";
+import { CircleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Mark from "./Mark";
 import NavLinks from "./NavLinks";
@@ -21,11 +21,6 @@ export default function SiteHeader() {
           </Button>
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
             <Link href="/login">Sign in</Link>
-          </Button>
-          <Button asChild className="group hidden sm:inline-flex">
-            <Link href="/dashboard">
-              Open workspace <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
-            </Link>
           </Button>
           <MobileMenu />
         </div>
