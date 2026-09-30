@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-[1280px] flex-col justify-center px-5 sm:px-8 lg:px-10">
+    <section className="mx-auto flex min-h-[70vh] max-w-[1280px] flex-col justify-center px-5 py-20 sm:px-8 lg:px-10">
       <p className="eyebrow text-blood">Blood, when it matters</p>
       <h1 className="animate-rise mt-6 max-w-[680px] font-display text-[clamp(3.5rem,7vw,6.7rem)] leading-[.91] tracking-[-.065em]">
         One small act.
@@ -11,6 +11,6 @@ export default function Home() {
         RaktoSheba connects hospitals with compatible, nearby donors—so emergency requests move with clarity, care, and
         less waiting.
       </p>
-    </main>
+    </section>
   );
 }
