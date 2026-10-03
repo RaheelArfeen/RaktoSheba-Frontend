@@ -13,7 +13,7 @@ async function LiveNumbers() {
     <dl className="grid grid-cols-2 gap-8 py-9 md:grid-cols-4">
       {LABELS.map((label, i) => (
         <div key={label}>
-          <dd className="font-display text-4xl tracking-[-.05em] text-blood">{values[i] ?? "—"}</dd>
+          <dd className="font-display text-4xl tracking-[-.015em] text-blood">{values[i] ?? "—"}</dd>
           <dt className="mt-1 text-xs font-bold tracking-[.15em] text-ink-muted uppercase">{label}</dt>
         </div>
       ))}

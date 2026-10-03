@@ -68,7 +68,7 @@ export function EligibilityChecker() {
         {result.kind === "eligible" && (
           <>
             <CheckCircle2 className="size-10 text-forest" />
-            <h3 className="mt-4 font-display text-4xl tracking-[-.05em] text-forest-deep">You can likely donate today.</h3>
+            <h3 className="mt-4 font-display text-4xl tracking-[-.015em] text-forest-deep">You can likely donate today.</h3>
             <p className="mt-3 leading-7 text-ink-muted">Based on your answers you meet the basic requirements. A short health check at the hospital confirms it on the day.</p>
             <ButtonLink href="/auth/register?role=donor" variant="forest" className="mt-6">
               Create your donor profile <ArrowRight />
@@ -78,7 +78,7 @@ export function EligibilityChecker() {
         {result.kind === "wait" && (
           <>
             <CalendarClock className="size-10 text-sand-deep" />
-            <h3 className="mt-4 font-display text-4xl tracking-[-.05em]">
+            <h3 className="mt-4 font-display text-4xl tracking-[-.015em]">
               Almost—{result.days} day{result.days === 1 ? "" : "s"} to go.
             </h3>
             <p className="mt-3 leading-7 text-ink-muted">
@@ -93,7 +93,7 @@ export function EligibilityChecker() {
         {result.kind === "not-now" && (
           <>
             <XCircle className="size-10 text-blood" />
-            <h3 className="mt-4 font-display text-4xl tracking-[-.05em]">Not right now—and that&apos;s okay.</h3>
+            <h3 className="mt-4 font-display text-4xl tracking-[-.015em]">Not right now—and that&apos;s okay.</h3>
             <ul className="mt-4 space-y-2">
               {result.reasons.map((reason) => (
                 <li key={reason} className="flex gap-2 text-sm leading-6 text-ink-muted">

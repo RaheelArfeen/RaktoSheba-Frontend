@@ -24,7 +24,7 @@ export function ErrorState({
         <AlertTriangle className="size-7" />
       </span>
       <div className="max-w-md space-y-2">
-        <h2 className="font-display text-4xl tracking-[-.05em]">{title}</h2>
+        <h2 className="font-display text-4xl tracking-[-.015em]">{title}</h2>
         <p className="text-sm leading-relaxed text-ink-muted">
           {message ?? "That didn't go through. It's likely temporary — try again in a moment."}
         </p>

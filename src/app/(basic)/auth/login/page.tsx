@@ -22,7 +22,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/auth/login
         <div className="absolute -bottom-40 -left-24 size-[400px] rounded-full border-[50px] border-mint-strong/10" />
         <div className="relative">
           <Eyebrow className="text-mint-strong">A little good, made easier</Eyebrow>
-          <h2 className="mt-5 max-w-[420px] font-display text-6xl leading-[.92] tracking-[-.06em]">A safer path to showing up.</h2>
+          <h2 className="mt-5 max-w-[420px] font-display text-6xl leading-[1.05] tracking-[-.02em]">A safer path to showing up.</h2>
           <p className="mt-6 max-w-[380px] leading-7 text-[#f2d8ca]/75">
             Your account keeps donor availability, hospital requests and every important update in one calm place.
           </p>
@@ -34,7 +34,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/auth/login
 
       <div className="mx-auto w-full max-w-[520px] lg:py-6">
         <Eyebrow>Welcome back</Eyebrow>
-        <h1 className="mt-3 font-display text-5xl leading-[.95] tracking-[-.06em]">Good to see you.</h1>
+        <h1 className="mt-3 font-display text-5xl leading-[1.08] tracking-[-.02em]">Good to see you.</h1>
         <p className="mt-4 mb-8 leading-7 text-ink-muted">Sign in to see requests and keep your profile ready.</p>
         <LoginForm next={nextPath} initialError={initialError} />
       </div>

@@ -56,7 +56,7 @@ export default function EmergencyPage() {
               </span>
               Emergency help · no login needed
             </p>
-            <h1 className="mt-5 font-display text-5xl leading-[.93] tracking-[-.06em] sm:text-7xl">Need blood urgently?</h1>
+            <h1 className="mt-5 font-display text-5xl leading-[1.05] tracking-[-.02em] sm:text-7xl">Need blood urgently?</h1>
             <p className="mt-6 max-w-[520px] text-[17px] leading-8 text-[#f2d8ca]/85">
               Call our emergency line first. Then prepare a clear summary below so hospitals and family know exactly what&apos;s needed.
             </p>
@@ -70,7 +70,7 @@ export default function EmergencyPage() {
             </span>
             <span>
               <Eyebrow>Tap to call · 24/7</Eyebrow>
-              <span className="mt-1 block font-display text-6xl leading-none tracking-[-.05em]">{contact.emergencyLine}</span>
+              <span className="mt-1 block font-display text-6xl leading-none tracking-[-.015em]">{contact.emergencyLine}</span>
               <span className="mt-2 block text-sm font-semibold text-ink-muted">RaktoSheba emergency coordination</span>
             </span>
           </a>
@@ -80,7 +80,7 @@ export default function EmergencyPage() {
       <Container className="grid gap-10 py-14 lg:grid-cols-2 lg:items-start">
         <div>
           <Eyebrow>Step 2 · Prepare a summary</Eyebrow>
-          <h2 className="mt-3 font-display text-4xl leading-[1] tracking-[-.05em]">One clear message, ready to share.</h2>
+          <h2 className="mt-3 font-display text-4xl leading-[1] tracking-[-.015em]">One clear message, ready to share.</h2>
           <p className="mt-4 max-w-md leading-7 text-ink-muted">
             Three quick questions. You&apos;ll get a short summary you can send by SMS, WhatsApp or read out on a call.
           </p>
@@ -90,7 +90,7 @@ export default function EmergencyPage() {
         </div>
         <div>
           <Eyebrow>While you wait</Eyebrow>
-          <h2 className="mt-3 font-display text-4xl leading-[1] tracking-[-.05em]">What helps most right now.</h2>
+          <h2 className="mt-3 font-display text-4xl leading-[1] tracking-[-.015em]">What helps most right now.</h2>
           <ul className="mt-8 space-y-3">
             {whileYouWait.map(({ icon: Icon, title, text }) => (
               <li key={title} className="flex gap-4 rounded-[22px] border border-ink/10 bg-cream p-5">
@@ -115,7 +115,7 @@ export default function EmergencyPage() {
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
               <Eyebrow>Live now</Eyebrow>
-              <h2 className="mt-3 font-display text-4xl tracking-[-.05em]">Critical and severe requests</h2>
+              <h2 className="mt-3 font-display text-4xl tracking-[-.015em]">Critical and severe requests</h2>
             </div>
             <Link href={`/requests?minUrgency=${EMERGENCY_LEVELS.severe.minUrgency}`} className="text-sm font-extrabold text-blood hover:underline">
               See all emergencies →
@@ -143,7 +143,7 @@ export default function EmergencyPage() {
               <Building2 size={22} />
             </span>
             <div>
-              <p className="font-display text-3xl tracking-[-.04em] text-blood-deep">Are you a hospital?</p>
+              <p className="font-display text-3xl tracking-[-.01em] text-blood-deep">Are you a hospital?</p>
               <p className="mt-1 max-w-lg text-sm leading-6 text-[#87584e]">Register to post verified requests that reach compatible donors near you within minutes.</p>
             </div>
           </div>

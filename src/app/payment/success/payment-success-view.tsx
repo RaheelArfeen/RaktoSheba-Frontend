@@ -25,7 +25,7 @@ export function PaymentSuccessView({ reference, payment }: { reference: string |
         <span className={cn("mx-auto grid size-16 place-items-center rounded-full", state.iconTone)}>
           <Icon className="size-8" />
         </span>
-        <h1 className={cn("mt-6 font-display text-5xl leading-[.95] tracking-[-.06em]", state.ink)}>{state.title}</h1>
+        <h1 className={cn("mt-6 font-display text-5xl leading-[1.08] tracking-[-.02em]", state.ink)}>{state.title}</h1>
         <p className={cn("mt-4 leading-7", state.sub)}>{state.text}</p>
         {payment && (
           <p className={cn("mt-5 font-display text-3xl", state.ink)}>

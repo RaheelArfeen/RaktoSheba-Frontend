@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Serif_Display, Manrope } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Bricolage_Grotesque } from "next/font/google";
 import { Toaster } from "sonner";
 import { AppShell } from "@/components/layout/app-shell";
 import { EmergencyBanner } from "@/components/layout/emergency-banner";
@@ -10,15 +10,17 @@ import { env } from "@/config/env";
 import { getSession } from "@/lib/session";
 import "./globals.css";
 
-const display = DM_Serif_Display({
-  variable: "--font-dm-serif",
-  weight: "400",
-  style: ["normal", "italic"],
+// Headings: a characterful grotesque that stays clear and punchy at large sizes.
+const heading = Bricolage_Grotesque({
+  variable: "--font-heading",
+  weight: ["600", "700", "800"],
   subsets: ["latin"],
 });
 
-const sans = Manrope({
-  variable: "--font-manrope",
+// Body: designed by the Braille Institute to be readable from a distance and for low vision,
+// with letter shapes that are hard to confuse (I, l, 1, O, 0).
+const body = Atkinson_Hyperlegible_Next({
+  variable: "--font-body",
   weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
 });
@@ -55,7 +57,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${display.variable} ${sans.variable} h-full antialiased`}
+      className={`${heading.variable} ${body.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <QueryProvider>

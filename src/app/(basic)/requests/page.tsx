@@ -28,7 +28,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/request
         <div className="absolute -top-24 -right-24 -z-10 size-[380px] rounded-full bg-mint/40 blur-3xl" />
         <Container className="py-14 sm:py-16">
           <Eyebrow>Live request board</Eyebrow>
-          <h1 className="mt-4 max-w-[820px] font-display text-5xl leading-[.95] tracking-[-.06em] sm:text-6xl">Someone nearby needs your help.</h1>
+          <h1 className="mt-4 max-w-[820px] font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">Someone nearby needs your help.</h1>
           <p className="mt-5 max-w-[620px] text-[17px] leading-8 text-ink-muted">
             Every request here was verified by our team. Filter by your blood group and area to see where you can make a difference.
           </p>
@@ -51,7 +51,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/request
             <span className="grid size-14 place-items-center rounded-2xl bg-mint text-forest">
               <SearchX className="size-6" />
             </span>
-            <p className="mt-5 font-display text-2xl tracking-[-.04em]">No requests match these filters</p>
+            <p className="mt-5 font-display text-2xl tracking-[-.01em]">No requests match these filters</p>
             <p className="mt-2 max-w-sm text-sm leading-6 text-ink-muted">Try a different blood group or urgency, or clear the filters to see every open request.</p>
             <ButtonLink href="/requests" variant="outline" className="mt-6">
               Clear filters

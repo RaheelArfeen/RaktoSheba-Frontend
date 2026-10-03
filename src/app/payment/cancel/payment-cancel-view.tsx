@@ -10,7 +10,7 @@ export function PaymentCancelView() {
         <span className="mx-auto grid size-16 place-items-center rounded-full bg-blush text-blood">
           <XCircle className="size-8" />
         </span>
-        <h1 className="mt-6 font-display text-5xl leading-[.95] tracking-[-.06em]">Payment cancelled.</h1>
+        <h1 className="mt-6 font-display text-5xl leading-[1.08] tracking-[-.02em]">Payment cancelled.</h1>
         <p className="mt-4 leading-7 text-ink-muted">No money was taken. You can try again whenever you&apos;re ready.</p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <ButtonLink href="/fund">

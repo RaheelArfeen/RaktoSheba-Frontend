@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
     <div className="space-y-8">
       <div>
         <Eyebrow>Admin workspace</Eyebrow>
-        <h1 className="mt-2 font-display text-5xl tracking-[-.05em]">The network, at a glance.</h1>
+        <h1 className="mt-2 font-display text-5xl tracking-[-.015em]">The network, at a glance.</h1>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
               <Icon size={18} />
             </span>
             <p className="mt-4 text-sm font-bold text-ink-muted">{label}</p>
-            <p className="mt-1 font-display text-4xl tracking-[-.04em]">{value}</p>
+            <p className="mt-1 font-display text-4xl tracking-[-.01em]">{value}</p>
             <p className="mt-1 text-xs font-semibold text-ink-faint">{note}</p>
           </div>
         ))}

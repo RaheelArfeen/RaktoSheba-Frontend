@@ -35,13 +35,13 @@ export default async function DonorDashboard({ searchParams }: PageProps<"/dashb
 
       <div>
         <Eyebrow>Donor workspace</Eyebrow>
-        <h1 className="mt-2 font-display text-5xl tracking-[-.05em]">Good to see you.</h1>
+        <h1 className="mt-2 font-display text-5xl tracking-[-.015em]">Good to see you.</h1>
         <p className="mt-2 text-ink-muted">{session.user.email}</p>
       </div>
 
       {!profile ? (
         <div className="rounded-[26px] border border-dashed border-ink/15 bg-cream p-8">
-          <p className="font-display text-2xl tracking-[-.04em]">Your donor profile isn&apos;t set up yet.</p>
+          <p className="font-display text-2xl tracking-[-.01em]">Your donor profile isn&apos;t set up yet.</p>
           <p className="mt-2 text-sm text-ink-muted">Add your blood group so we can match you with requests. Profile editing arrives in the next update.</p>
         </div>
       ) : (

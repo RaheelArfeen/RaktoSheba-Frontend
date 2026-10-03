@@ -67,7 +67,7 @@ export default async function RequestDetailPage({ params }: PageProps<"/requests
                   {open ? <EmergencyBadge urgency={request.urgency} /> : <StatusBadge status={request.status} />}
                   <span className="text-xs font-semibold opacity-70">Posted {timeAgo(request.createdAt)}</span>
                 </div>
-                <h1 className="mt-5 font-display text-5xl leading-[.95] tracking-[-.06em] sm:text-6xl">{group} blood needed</h1>
+                <h1 className="mt-5 font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">{group} blood needed</h1>
                 <p className="mt-4 max-w-md leading-7 opacity-80">{open ? EMERGENCY_LEVELS[level].description : `${requestStatusLabel[request.status]}.`}</p>
               </div>
               <div className="grid size-28 shrink-0 place-items-center rounded-[28px] bg-blush font-display text-5xl text-blood">{group}</div>
@@ -102,7 +102,7 @@ export default async function RequestDetailPage({ params }: PageProps<"/requests
         <aside className="space-y-6">
           <div className="rounded-[26px] border border-ink/10 bg-cream p-6 sm:p-7">
             <Eyebrow>Where</Eyebrow>
-            <p className="mt-3 font-display text-2xl tracking-[-.04em]">{request.hospital?.name ?? "Partner hospital"}</p>
+            <p className="mt-3 font-display text-2xl tracking-[-.01em]">{request.hospital?.name ?? "Partner hospital"}</p>
             <p className="mt-2 flex items-center gap-1.5 text-sm text-ink-muted">
               <MapPin size={14} /> {request.hospital?.address ?? "Bangladesh"}
             </p>

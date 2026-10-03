@@ -42,7 +42,7 @@ function Sidebar({ user, onNavigate }: { user: AuthUser; onNavigate?: () => void
           <span className="absolute -top-1.5 right-0 size-3 rounded-full bg-mint-strong" />
           <HeartPulse size={22} strokeWidth={2.2} aria-hidden />
         </span>
-        <span className="font-display text-[22px] tracking-[-.04em] text-cream">RaktoSheba</span>
+        <span className="font-display text-[22px] tracking-[-.01em] text-cream">RaktoSheba</span>
       </Link>
       <p className="mt-12 px-3 text-[10px] font-extrabold tracking-[.18em] text-[#f2d8ca]/50 uppercase">{roleLabel[user.role]} workspace</p>
       <div className="mt-3">
@@ -103,7 +103,7 @@ export function DashboardShell({ user, children }: { user: AuthUser; children: R
           <button type="button" onClick={() => setOpen(true)} aria-label="Open menu" className="grid size-10 place-items-center rounded-full text-ink-muted hover:bg-linen">
             <Menu size={20} />
           </button>
-          <p className="font-display text-xl tracking-[-.04em]">{roleLabel[user.role]} workspace</p>
+          <p className="font-display text-xl tracking-[-.01em]">{roleLabel[user.role]} workspace</p>
         </header>
         <main className="mx-auto max-w-[1250px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">{children}</main>
       </div>

@@ -29,7 +29,7 @@ export default async function HospitalDashboard({ searchParams }: PageProps<"/da
 
       <div>
         <Eyebrow>Hospital workspace</Eyebrow>
-        <h1 className="mt-2 font-display text-5xl tracking-[-.05em]">{hospital?.name ?? "Your hospital"}</h1>
+        <h1 className="mt-2 font-display text-5xl tracking-[-.015em]">{hospital?.name ?? "Your hospital"}</h1>
         {hospital && (
           <p className="mt-2 flex items-center gap-1.5 text-ink-muted">
             <MapPin size={15} /> {hospital.address}
@@ -39,7 +39,7 @@ export default async function HospitalDashboard({ searchParams }: PageProps<"/da
 
       {!hospital ? (
         <div className="rounded-[26px] border border-dashed border-ink/15 bg-cream p-8">
-          <p className="font-display text-2xl tracking-[-.04em]">Your hospital profile isn&apos;t set up yet.</p>
+          <p className="font-display text-2xl tracking-[-.01em]">Your hospital profile isn&apos;t set up yet.</p>
           <p className="mt-2 text-sm text-ink-muted">Add your hospital&apos;s name and address to start posting requests.</p>
         </div>
       ) : hospital.verified ? (

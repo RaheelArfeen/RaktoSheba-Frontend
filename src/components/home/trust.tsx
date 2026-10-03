@@ -15,7 +15,7 @@ export function TrustSection() {
         <div className="grid gap-10 rounded-[34px] bg-mint p-8 sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <Eyebrow className="mb-4 text-forest">Built for trust</Eyebrow>
-            <h2 className="max-w-[650px] font-display text-4xl leading-[.98] tracking-[-.05em] text-forest-deep sm:text-5xl">
+            <h2 className="max-w-[650px] font-display text-4xl leading-[1.1] tracking-[-.015em] text-forest-deep sm:text-5xl">
               Good intentions deserve a good system.
             </h2>
             <p className="mt-5 max-w-[620px] leading-7 text-[#4a806c]">

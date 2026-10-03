@@ -10,7 +10,7 @@ export function Logo({ compact = false, className, onClick }: { compact?: boolea
         <span className="absolute -top-1.5 right-0 size-3 rounded-full bg-mint-strong" />
         <HeartPulse size={22} strokeWidth={2.2} aria-hidden />
       </span>
-      {!compact && <span className="font-display text-[22px] tracking-[-.04em] text-ink">RaktoSheba</span>}
+      {!compact && <span className="font-display text-[22px] tracking-[-.01em] text-ink">RaktoSheba</span>}
     </Link>
   );
 }

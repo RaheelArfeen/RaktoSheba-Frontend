@@ -9,7 +9,7 @@ export default function RequestNotFound() {
         <span className="grid size-14 place-items-center rounded-2xl bg-mint text-forest">
           <SearchX className="size-6" />
         </span>
-        <p className="mt-5 font-display text-2xl tracking-[-.04em]">This request isn&apos;t available</p>
+        <p className="mt-5 font-display text-2xl tracking-[-.01em]">This request isn&apos;t available</p>
         <p className="mt-2 max-w-sm text-sm leading-6 text-ink-muted">
           It may have been removed, or it hasn&apos;t been verified yet. Open requests are always listed on the board.
         </p>
