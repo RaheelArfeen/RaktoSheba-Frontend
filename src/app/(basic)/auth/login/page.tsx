@@ -34,7 +34,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/auth/login
       <div className="mx-auto w-full max-w-[520px] lg:py-6">
         <Eyebrow>Welcome back</Eyebrow>
         <h1 className="mt-3 font-display text-5xl leading-[.95] tracking-[-.06em]">Good to see you.</h1>
-        <p className="mt-4 mb-8 leading-7 text-ink-muted">Sign in to see requests and keep your profile ready—or try a demo account in one click.</p>
+        <p className="mt-4 mb-8 leading-7 text-ink-muted">Sign in to see requests and keep your profile ready.</p>
         <LoginForm next={nextPath} />
       </div>
     </Container>

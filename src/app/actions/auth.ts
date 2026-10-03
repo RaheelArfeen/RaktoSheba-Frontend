@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 import { ACCESS_COOKIE, REFRESH_COOKIE, dashboardPath, getSession, safeNext, sessionCookieOptions } from "@/lib/session";
 import { loginSchema, registerSchema, type LoginValues, type RegisterValues } from "@/lib/validations";
-import type { AuthSession, Role } from "@/types";
+import type { AuthSession } from "@/types";
 
 type ActionResult = { error: string } | void;
 
@@ -32,19 +32,6 @@ export async function login(values: LoginValues, next?: string): Promise<ActionR
   }
   await startSession(session);
   redirect(safeNext(next, dashboardPath(session.user.role)));
-}
-
-// Seeded demo accounts. Kept on the server, so the passwords never reach the browser.
-const DEMO_ACCOUNTS: Record<Role, string> = {
-  ADMIN: "admin@raktosheba.com",
-  HOSPITAL: "hospital@raktosheba.com",
-  DONOR: "donor@raktosheba.com",
-};
-const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "Demo@1234";
-
-export async function demoLogin(role: Role, next?: string): Promise<ActionResult> {
-  if (!(role in DEMO_ACCOUNTS)) return { error: "Unknown demo account." };
-  return login({ email: DEMO_ACCOUNTS[role], password: DEMO_PASSWORD }, next);
 }
 
 export async function register(values: RegisterValues): Promise<ActionResult> {
