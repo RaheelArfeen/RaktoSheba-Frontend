@@ -4,6 +4,7 @@ import { Check, CircleAlert, HeartPulse, MapPin, ShieldCheck, Sparkles } from "l
 import { EmergencyBadge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { Skeleton } from "@/components/ui/skeleton";
 import { bloodGroupLabel } from "@/lib/blood";
 import { unitsLabel } from "@/lib/format";
 import { publicApi } from "@/lib/requests";
@@ -99,7 +100,14 @@ export function HeroSection() {
             </span>
           </div>
         </div>
-        <Suspense fallback={<div className="hidden min-h-[440px] lg:block" />}>
+        <Suspense
+          fallback={
+            <div className="relative hidden min-h-[440px] lg:block">
+              <Skeleton className="absolute top-12 right-1 h-44 w-[270px] rotate-[5deg] rounded-[26px]" />
+              <Skeleton className="absolute bottom-16 left-0 h-36 w-[268px] -rotate-[6deg] rounded-[26px]" />
+            </div>
+          }
+        >
           <HeroCards />
         </Suspense>
       </Container>

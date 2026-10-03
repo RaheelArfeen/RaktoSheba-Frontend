@@ -1,7 +1,7 @@
 import { LoadingLabel, Skeleton, StatCardsSkeleton } from "@/components/ui/skeleton";
 
 /** Shown inside the dashboard frame while a workspace page loads. */
-export default function DashboardLoading() {
+export default function Loading() {
   return (
     <div className="space-y-8">
       <LoadingLabel>Loading your workspace…</LoadingLabel>
