@@ -1,8 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { startCheckout } from "@/app/actions/payments";
+import { Spinner } from "@/components/ui/spinner";
 import { ArrowRight, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
@@ -15,22 +18,29 @@ const purposes = [
   { value: "PLATFORM_DONATION" as const, title: "Keep RaktoSheba running", text: "Servers, SMS alerts and verification work." },
 ];
 
-export function FundForm() {
-  const router = useRouter();
+export function FundForm({ signedIn, defaults }: { signedIn: boolean; defaults?: Partial<FundValues> }) {
+  const [error, setError] = useState("");
+  const [pending, startTransition] = useTransition();
   const {
     register,
     handleSubmit,
     setValue,
     control,
     formState: { errors },
-  } = useForm<FundInput, unknown, FundValues>({ resolver: zodResolver(fundSchema), defaultValues: { amount: 10, purpose: "EMERGENCY_FUND" } });
+  } = useForm<FundInput, unknown, FundValues>({ resolver: zodResolver(fundSchema), defaultValues: { amount: defaults?.amount ?? 10, purpose: defaults?.purpose ?? "EMERGENCY_FUND" } });
   const amount = Number(useWatch({ control, name: "amount" }));
   const purpose = useWatch({ control, name: "purpose" });
 
-  // Payments need a signed-in account, so the choice travels with the visitor to sign-in.
+  // The action sends signed-out visitors to sign in (keeping their choice) and everyone else to Stripe.
   const onSubmit = (values: FundValues) => {
-    const next = `/fund?amount=${values.amount}&purpose=${values.purpose}`;
-    router.push(`/auth/login?next=${encodeURIComponent(next)}`);
+    setError("");
+    startTransition(async () => {
+      const result = await startCheckout(values);
+      if (result?.error) {
+        setError(result.error);
+        toast.error(result.error);
+      }
+    });
   };
 
   return (
@@ -80,11 +90,23 @@ export function FundForm() {
         <FieldError message={errors.purpose?.message} />
       </fieldset>
 
-      <Button type="submit" size="lg" className="w-full">
-        Contribute {Number.isFinite(amount) && amount >= 1 ? formatCurrency(amount) : ""} <ArrowRight />
+      {error && (
+        <p role="alert" className="rounded-2xl bg-blush px-4 py-3 text-sm font-semibold text-blood">
+          {error}
+        </p>
+      )}
+      <Button type="submit" size="lg" className="w-full" disabled={pending}>
+        {pending ? (
+          <Spinner className="text-cream" />
+        ) : (
+          <>
+            {signedIn ? "Pay" : "Sign in to contribute"} {Number.isFinite(amount) && amount >= 1 ? formatCurrency(amount) : ""} <ArrowRight />
+          </>
+        )}
       </Button>
       <p className="flex items-center justify-center gap-1.5 text-center text-xs text-ink-faint">
-        <Lock size={12} /> Secure payment by Stripe. You&apos;ll sign in first so we can send your receipt.
+        <Lock size={12} /> Secure payment by Stripe (test mode).{" "}
+        {signedIn ? "You'll be sent to Stripe to pay." : "You'll sign in first so we can send your receipt."}
       </p>
     </form>
   );

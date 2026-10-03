@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { getSession } from "@/lib/session";
 import { FundForm } from "./fund-form";
 import { Bus, MessageSquareText, ShieldCheck } from "lucide-react";
 
@@ -15,7 +16,15 @@ const uses = [
   { icon: ShieldCheck, title: "Keeping it trustworthy", text: "Verifying hospitals and requests, so every alert a donor receives is real." },
 ];
 
-export default function FundPage() {
+export default async function FundPage({ searchParams }: PageProps<"/fund">) {
+  const [session, params] = await Promise.all([getSession(), searchParams]);
+  // After signing in, the visitor comes back here with their chosen amount and purpose.
+  const amount = Number(params.amount);
+  const defaults = {
+    amount: Number.isFinite(amount) && amount >= 1 && amount <= 1000 ? amount : undefined,
+    purpose: params.purpose === "PLATFORM_DONATION" || params.purpose === "EMERGENCY_FUND" ? params.purpose : undefined,
+  } as const;
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-ink/10">
@@ -46,7 +55,7 @@ export default function FundPage() {
             ))}
           </ul>
         </div>
-        <FundForm />
+        <FundForm signedIn={!!session} defaults={defaults} />
       </Container>
     </>
   );
