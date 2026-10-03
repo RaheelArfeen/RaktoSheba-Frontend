@@ -92,7 +92,7 @@ export default function EmergencySummaryWizard() {
         </div>
         <pre className="mt-6 rounded-2xl bg-cream/80 p-4 font-sans text-sm leading-6 whitespace-pre-wrap text-ink">{summaryText(summary)}</pre>
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-          <Button variant="secondary" className="flex-1" size={} onClick={share}>
+          <Button variant="secondary" className="flex-1" onClick={share}>
             <Share2 /> Share summary
           </Button>
           <Button variant="outline" className="flex-1" onClick={copy}>
