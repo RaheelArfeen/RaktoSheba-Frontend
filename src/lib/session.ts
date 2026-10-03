@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import type { AuthUser, Role } from "@/types";
+import type { AuthSession, AuthUser, Role } from "@/types";
 
 // Cookie names for the session. Both are httpOnly, so browser JavaScript can never read the tokens.
 export const ACCESS_COOKIE = "rs_access";
@@ -47,6 +47,13 @@ export function sessionCookieOptions(token: string, fallbackMaxAge: number) {
     path: "/",
     maxAge: exp ? Math.max(0, exp - Math.floor(Date.now() / 1000)) : fallbackMaxAge,
   };
+}
+
+/** Saves a new session's tokens as httpOnly cookies (Server Actions and Route Handlers only). */
+export async function setSessionCookies(session: Pick<AuthSession, "accessToken" | "refreshToken">) {
+  const store = await cookies();
+  store.set(ACCESS_COOKIE, session.accessToken, sessionCookieOptions(session.accessToken, 30 * 60));
+  store.set(REFRESH_COOKIE, session.refreshToken, sessionCookieOptions(session.refreshToken, 30 * 24 * 60 * 60));
 }
 
 /** Only allow redirects back into this site (never to another domain). */

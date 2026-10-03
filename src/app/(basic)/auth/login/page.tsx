@@ -11,8 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage({ searchParams }: PageProps<"/auth/login">) {
-  const { next } = await searchParams;
+  const { next, error } = await searchParams;
   const nextPath = safeNext(next, "") || undefined;
+  const initialError = typeof error === "string" ? error.slice(0, 200) : undefined;
 
   return (
     <Container className="grid gap-10 py-12 lg:grid-cols-[.9fr_1.1fr] lg:items-stretch lg:py-16">
@@ -35,7 +36,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/auth/login
         <Eyebrow>Welcome back</Eyebrow>
         <h1 className="mt-3 font-display text-5xl leading-[.95] tracking-[-.06em]">Good to see you.</h1>
         <p className="mt-4 mb-8 leading-7 text-ink-muted">Sign in to see requests and keep your profile ready.</p>
-        <LoginForm next={nextPath} />
+        <LoginForm next={nextPath} initialError={initialError} />
       </div>
     </Container>
   );

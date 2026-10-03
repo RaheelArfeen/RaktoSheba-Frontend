@@ -143,3 +143,17 @@ export const registerSteps: (keyof RegisterFormValues)[][] = [
   ["email", "password", "confirmPassword"],
   ["bloodGroup", "hospitalName", "hospitalAddress"],
 ];
+
+// ---- Onboarding (finish profile after Google sign-up) ----
+
+export const donorProfileSchema = z.object({
+  bloodGroup: z.enum(BLOOD_GROUPS as [string, ...string[]], { error: "Choose your blood group." }),
+});
+
+export const hospitalProfileSchema = z.object({
+  hospitalName: z.string().trim().min(2, "Enter the hospital's name.").max(120, "Keep it under 120 characters."),
+  hospitalAddress: z.string().trim().min(5, "Enter the full address.").max(200, "Keep it under 200 characters."),
+});
+
+export type DonorProfileValues = z.infer<typeof donorProfileSchema>;
+export type HospitalProfileValues = z.infer<typeof hospitalProfileSchema>;

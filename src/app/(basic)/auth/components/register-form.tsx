@@ -10,11 +10,12 @@ import { register as registerAccount } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { GoogleButton } from "./google-button";
 import { BLOOD_GROUPS, bloodGroupLabel } from "@/lib/blood";
 import { cn } from "@/lib/cn";
 import { registerFormSchema, registerSteps, type RegisterFormValues, type RegisterValues } from "@/lib/validations";
 
-const stepTitles = ["How will you help?", "Create your account", "A little about you"];
+const stepTitles = ["How will you help?", "Sign up", "A little about you"];
 
 export function RegisterForm({ initialRole }: { initialRole?: "DONOR" | "HOSPITAL" }) {
   const [step, setStep] = useState(0);
@@ -132,6 +133,11 @@ export function RegisterForm({ initialRole }: { initialRole?: "DONOR" | "HOSPITA
               <FieldError message={errors.confirmPassword?.message} />
             </div>
           </div>
+          <div className="flex items-center gap-3 pt-1 text-xs font-bold tracking-[.14em] text-ink-faint uppercase">
+            <span className="h-px flex-1 bg-ink/10" /> or <span className="h-px flex-1 bg-ink/10" />
+          </div>
+          {/* Google creates the account with the role picked in step 1, then asks for the profile details. */}
+          <GoogleButton role={role} label={role === "HOSPITAL" ? "Sign up as a hospital with Google" : "Sign up as a donor with Google"} />
         </div>
       )}
 

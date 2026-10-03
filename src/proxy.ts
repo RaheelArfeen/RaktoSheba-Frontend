@@ -5,7 +5,8 @@ import { ACCESS_COOKIE, REFRESH_COOKIE, dashboardPath, decodeToken, isExpired, s
 const ROLE_AREAS = ["admin", "hospital", "donor"];
 
 /** Pages outside /dashboard that also need a signed-in user. The /requests board itself stays public. */
-const isSignedInOnly = (pathname: string) => pathname.startsWith("/payment/") || /^\/requests\/[^/]+\/?$/.test(pathname);
+const isSignedInOnly = (pathname: string) =>
+  pathname.startsWith("/payment/") || pathname.startsWith("/onboarding") || /^\/requests\/[^/]+\/?$/.test(pathname);
 
 /** Swap an expired access token for a fresh one using the refresh token. */
 async function refreshAccessToken(refreshToken: string): Promise<string | null> {

@@ -10,10 +10,11 @@ import { login } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { GoogleButton } from "./google-button";
 import { loginSchema, type LoginValues } from "@/lib/validations";
 
-export function LoginForm({ next }: { next?: string }) {
-  const [error, setError] = useState("");
+export function LoginForm({ next, initialError }: { next?: string; initialError?: string }) {
+  const [error, setError] = useState(initialError ?? "");
   const [pending, startTransition] = useTransition();
   const {
     register,
@@ -55,6 +56,11 @@ export function LoginForm({ next }: { next?: string }) {
           {pending ? <Spinner className="text-cream" /> : <>Sign in <ArrowRight /></>}
         </Button>
       </form>
+
+      <div className="flex items-center gap-3 text-xs font-bold tracking-[.14em] text-ink-faint uppercase">
+        <span className="h-px flex-1 bg-ink/10" /> or <span className="h-px flex-1 bg-ink/10" />
+      </div>
+      <GoogleButton next={next} />
 
       <p className="text-center text-sm text-ink-muted">
         New to RaktoSheba?{" "}

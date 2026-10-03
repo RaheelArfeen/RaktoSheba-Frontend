@@ -3,19 +3,22 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
-import { ACCESS_COOKIE, REFRESH_COOKIE, dashboardPath, getSession, safeNext, sessionCookieOptions } from "@/lib/session";
-import { loginSchema, registerSchema, type LoginValues, type RegisterValues } from "@/lib/validations";
+import { ACCESS_COOKIE, REFRESH_COOKIE, dashboardPath, getSession, safeNext, setSessionCookies } from "@/lib/session";
+import {
+  donorProfileSchema,
+  hospitalProfileSchema,
+  loginSchema,
+  registerSchema,
+  type DonorProfileValues,
+  type HospitalProfileValues,
+  type LoginValues,
+  type RegisterValues,
+} from "@/lib/validations";
 import type { AuthSession } from "@/types";
 
 type ActionResult = { error: string } | void;
 
-const DAY = 24 * 60 * 60;
-
-async function startSession(session: AuthSession) {
-  const store = await cookies();
-  store.set(ACCESS_COOKIE, session.accessToken, sessionCookieOptions(session.accessToken, 30 * 60));
-  store.set(REFRESH_COOKIE, session.refreshToken, sessionCookieOptions(session.refreshToken, 30 * DAY));
-}
+const startSession = setSessionCookies;
 
 const messageFor = (error: unknown) =>
   error instanceof ApiError ? error.message : "We couldn't reach RaktoSheba. Check your connection and try again.";
@@ -68,6 +71,34 @@ export async function register(values: RegisterValues): Promise<ActionResult> {
     redirect(`${dashboardPath(session.user.role)}?profile=incomplete`);
   }
   redirect(`${dashboardPath(session.user.role)}?welcome=1`);
+}
+
+/** Finish a donor or hospital profile (used after signing up with Google). */
+export async function completeProfile(values: DonorProfileValues | HospitalProfileValues, next?: string): Promise<ActionResult> {
+  const session = await getSession();
+  if (!session) redirect("/auth/login");
+  const { role } = session.user;
+
+  try {
+    if (role === "DONOR") {
+      const parsed = donorProfileSchema.safeParse(values);
+      if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Choose your blood group." };
+      await api("/donors", { method: "POST", token: session.accessToken, body: { bloodGroup: parsed.data.bloodGroup }, cache: "no-store" });
+    } else if (role === "HOSPITAL") {
+      const parsed = hospitalProfileSchema.safeParse(values);
+      if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the hospital details." };
+      await api("/hospitals", {
+        method: "POST",
+        token: session.accessToken,
+        body: { name: parsed.data.hospitalName, address: parsed.data.hospitalAddress },
+        cache: "no-store",
+      });
+    }
+  } catch (error) {
+    // A profile that already exists is fine — just carry on to the dashboard.
+    if (!(error instanceof ApiError && error.status === 409)) return { error: messageFor(error) };
+  }
+  redirect(safeNext(next, `${dashboardPath(role)}?welcome=1`));
 }
 
 export async function logout(): Promise<void> {
