@@ -1,58 +1,48 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import Link from "next/link";
+import type { ComponentProps, ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
-import { cn } from "@/lib/utils";
+type Variant = "primary" | "outline" | "ghost" | "soft" | "forest" | "light";
+type Size = "sm" | "md" | "lg";
 
-const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold transition-all outline-none active:scale-[.98] disabled:pointer-events-none disabled:opacity-60 focus-visible:ring-4 focus-visible:ring-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  {
-    variants: {
-      variant: {
-        default:
-          "bg-blood text-cream shadow-[0_8px_20px_rgba(169,40,54,.18)] hover:-translate-y-0.5 hover:bg-blood-deep",
-        destructive: "bg-blood text-cream hover:bg-blood-deep",
-        outline: "border border-ink/15 bg-cream/70 text-ink-soft hover:border-blood/30 hover:bg-cream",
-        secondary: "bg-forest text-white hover:-translate-y-0.5 hover:bg-forest-deep",
-        soft: "border border-blood/20 bg-blush/70 text-blood hover:bg-blush",
-        ghost: "text-ink-muted hover:bg-linen hover:text-blood",
-        link: "rounded-none px-0 text-blood hover:text-blood-deep hover:underline underline-offset-4",
-      },
-      size: {
-        default: "h-11 px-5",
-        sm: "h-9 px-4 text-xs",
-        lg: "h-13 px-6",
-        icon: "size-10",
-        "icon-sm": "size-9",
-        "icon-lg": "size-11",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  },
-);
+/*
+  Icons are sized here rather than at each call site, so any lucide icon
+  dropped into a button matches the rest.
+*/
+const base =
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-bold whitespace-nowrap transition-all active:scale-[.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood disabled:pointer-events-none disabled:opacity-60 [&>svg]:size-4 [&>svg]:shrink-0";
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
+const variants: Record<Variant, string> = {
+  primary: "bg-blood text-cream shadow-[0_8px_20px_rgba(169,40,54,.18)] hover:-translate-y-0.5 hover:bg-blood-deep",
+  outline: "border border-ink/15 bg-cream/70 text-ink-soft hover:border-blood/30 hover:bg-cream",
+  ghost: "text-ink-muted hover:bg-linen hover:text-blood",
+  soft: "border border-blood/20 bg-blush/70 text-blood hover:bg-blush",
+  forest: "bg-forest text-white hover:-translate-y-0.5 hover:bg-forest-deep",
+  light: "bg-cream text-blood hover:bg-white",
+};
 
+const sizes: Record<Size, string> = {
+  sm: "h-9 px-4 text-xs",
+  md: "h-11 px-5 text-sm",
+  lg: "h-13 px-6 text-sm",
+};
+
+type ButtonProps = ComponentProps<"button"> & { variant?: Variant; size?: Size; children: ReactNode };
+
+export function Button({ variant = "primary", size = "md", className, children, ...props }: ButtonProps) {
   return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
+    <button className={cn(base, variants[variant], sizes[size], className)} {...props}>
+      {children}
+    </button>
   );
 }
 
-export { Button, buttonVariants };
+type ButtonLinkProps = ComponentProps<typeof Link> & { variant?: Variant; size?: Size; children: ReactNode };
+
+export function ButtonLink({ variant = "primary", size = "md", className, children, ...props }: ButtonLinkProps) {
+  return (
+    <Link className={cn(base, variants[variant], sizes[size], className)} {...props}>
+      {children}
+    </Link>
+  );
+}

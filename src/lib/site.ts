@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/lib/api/client";
+import { API_BASE_URL } from "@/lib/api";
 
 // Shared navigation and contact details for the public site.
 export const publicNav = [
@@ -21,7 +21,7 @@ export const footerNav = [
     title: "Give",
     links: [
       { href: "/donate", label: "Can I donate?" },
-      { href: "/register", label: "Become a donor" },
+      { href: "/auth/register?role=donor", label: "Become a donor" },
       { href: "/fund", label: "Emergency fund" },
     ],
   },

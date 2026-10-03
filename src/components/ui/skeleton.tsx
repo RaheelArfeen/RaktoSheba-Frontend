@@ -1,13 +1,10 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 
-function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="skeleton"
-      className={cn("bg-accent animate-pulse rounded-md", className)}
-      {...props}
-    />
-  );
+export function Skeleton({ className }: { className?: string }) {
+  return <div className={cn("animate-pulse rounded-lg bg-linen", className)} />;
 }
 
-export { Skeleton };
+/** Placeholder shaped like a request card, used while boards load. */
+export function RequestCardSkeleton() {
+  return <Skeleton className="h-24 rounded-[24px]" />;
+}

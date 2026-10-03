@@ -1,4 +1,4 @@
-import type { BloodGroup } from "@/types/api";
+import type { BloodGroup } from "@/types";
 
 /** Display order used across the site: universal donor first. */
 export const BLOOD_GROUPS: BloodGroup[] = [

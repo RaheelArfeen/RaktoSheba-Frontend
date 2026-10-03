@@ -1,47 +1,42 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import { EMERGENCY_LEVELS, emergencyLevel, requestStatusLabel } from "@/lib/emergency";
+import { cn } from "@/lib/cn";
+import type { EmergencyLevel, RequestStatus } from "@/types";
 
-import { cn } from "@/lib/utils";
-
-// Emergency-level variants match lib/emergency.ts so urgency looks the same everywhere.
-const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[.12em] [&>svg]:pointer-events-none [&>svg]:size-3",
-  {
-    variants: {
-      variant: {
-        default: "bg-blood text-cream",
-        critical: "bg-blood text-cream",
-        severe: "bg-blush text-blood",
-        urgent: "bg-sand text-sand-deep",
-        standard: "bg-linen text-ink-muted",
-        success: "bg-mint text-forest",
-        neutral: "bg-linen text-ink-muted",
-        outline: "border border-ink/15 text-ink-soft",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  },
-);
-
-function Badge({
-  className,
-  variant,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : "span";
-
+/** Small uppercase pill used for emergency levels and request statuses. */
+export function Badge({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <Comp
-      data-slot="badge"
-      className={cn(badgeVariants({ variant }), className)}
-      {...props}
-    />
+    <span
+      className={cn(
+        "inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-extrabold tracking-[.12em] whitespace-nowrap uppercase",
+        className,
+      )}
+    >
+      {children}
+    </span>
   );
 }
 
-export { Badge, badgeVariants };
+const levelStyles: Record<EmergencyLevel, string> = {
+  critical: "bg-blood text-cream",
+  severe: "bg-blush text-blood",
+  urgent: "bg-sand text-sand-deep",
+  standard: "bg-linen text-ink-muted",
+};
+
+/** Critical / Severe / Urgent / Standard, from a request's 1–5 urgency. */
+export function EmergencyBadge({ urgency }: { urgency: number }) {
+  const level = emergencyLevel(urgency);
+  return <Badge className={levelStyles[level]}>{EMERGENCY_LEVELS[level].label}</Badge>;
+}
+
+const statusStyles: Record<RequestStatus, string> = {
+  PENDING: "bg-sand text-sand-deep",
+  VERIFIED: "bg-blush text-blood",
+  MATCHED: "bg-mint text-forest",
+  FULFILLED: "bg-mint text-forest",
+  CANCELLED: "bg-linen text-ink-muted",
+};
+
+export function StatusBadge({ status }: { status: RequestStatus }) {
+  return <Badge className={statusStyles[status]}>{requestStatusLabel[status]}</Badge>;
+}

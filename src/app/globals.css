@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 /*
  * RaktoSheba design tokens.
@@ -102,28 +101,6 @@
     background: var(--color-blood);
     color: var(--color-cream);
   }
-}
-
-/* Centered page width shared by header, footer and every section. */
-@utility page-container {
-  width: 100%;
-  max-width: 1440px;
-  margin-inline: auto;
-  padding-inline: 1.25rem;
-  @media (width >= 40rem) {
-    padding-inline: 2rem;
-  }
-  @media (width >= 80rem) {
-    padding-inline: 3rem;
-  }
-}
-
-/* Small uppercase label used above section headings. */
-@utility eyebrow {
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
 }
 
 @keyframes rise {

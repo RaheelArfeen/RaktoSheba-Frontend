@@ -1,4 +1,4 @@
-import type { EmergencyLevel, RequestStatus } from "@/types/api";
+import type { EmergencyLevel, RequestStatus } from "@/types";
 
 /**
  * Emergency levels, derived from a request's 1–5 urgency. This is the single
