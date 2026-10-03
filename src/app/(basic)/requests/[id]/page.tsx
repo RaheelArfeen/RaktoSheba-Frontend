@@ -14,6 +14,7 @@ import { cn } from "@/lib/cn";
 import { EMERGENCY_LEVELS, emergencyLevel, requestStatusLabel } from "@/lib/emergency";
 import { formatDateTime, timeAgo, unitsLabel } from "@/lib/format";
 import { publicApi } from "@/lib/requests";
+import { getSession } from "@/lib/session";
 import { ShareButton } from "../components/share-button";
 
 // Shared by generateMetadata and the page, so the API is called once per request.
@@ -37,7 +38,8 @@ export async function generateMetadata({ params }: PageProps<"/requests/[id]">):
 }
 
 export default async function RequestDetailPage({ params }: PageProps<"/requests/[id]">) {
-  const request = await getRequest((await params).id);
+  const [request, session] = await Promise.all([getRequest((await params).id), getSession()]);
+  const isDonor = session?.user.role === "DONOR";
   const level = emergencyLevel(request.urgency);
   const open = request.status === "VERIFIED";
   const group = bloodGroupLabel[request.bloodGroup];
@@ -104,17 +106,18 @@ export default async function RequestDetailPage({ params }: PageProps<"/requests
             <p className="mt-2 flex items-center gap-1.5 text-sm text-ink-muted">
               <MapPin size={14} /> {request.hospital?.address ?? "Bangladesh"}
             </p>
-            {open && (
-              <ButtonLink href={`/auth/login?next=/requests/${request.id}`} className="mt-6 w-full">
+            {open && isDonor && (
+              <ButtonLink href={`/dashboard/donor?request=${request.id}`} className="mt-6 w-full">
                 I can help <ArrowRight />
               </ButtonLink>
             )}
-            <div className={open ? "mt-3" : "mt-6"}>
+            <div className={open && isDonor ? "mt-3" : "mt-6"}>
               <ShareButton title={`${group} blood needed`} text={`${group} blood is needed at ${request.hospital?.name ?? "a hospital"}. Can you help?`} />
             </div>
-            {open && (
-              <p className="mt-4 text-xs leading-5 text-ink-faint">Sign in as a donor to accept. We check your blood group and eligibility before confirming the match.</p>
+            {open && isDonor && (
+              <p className="mt-4 text-xs leading-5 text-ink-faint">We check your blood group and eligibility before confirming the match.</p>
             )}
+            {open && !isDonor && <p className="mt-4 text-xs leading-5 text-ink-faint">Only donors can accept requests. Share this page with someone who can help.</p>}
           </div>
           <div className="rounded-[26px] border border-ink/10 bg-cream p-6 sm:p-7">
             <Eyebrow className="mb-6">Progress</Eyebrow>

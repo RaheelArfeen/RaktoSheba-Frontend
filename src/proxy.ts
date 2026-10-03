@@ -4,6 +4,9 @@ import { ACCESS_COOKIE, REFRESH_COOKIE, dashboardPath, decodeToken, isExpired, s
 
 const ROLE_AREAS = ["admin", "hospital", "donor"];
 
+/** Pages outside /dashboard that also need a signed-in user. The /requests board itself stays public. */
+const isSignedInOnly = (pathname: string) => pathname.startsWith("/payment/") || /^\/requests\/[^/]+\/?$/.test(pathname);
+
 /** Swap an expired access token for a fresh one using the refresh token. */
 async function refreshAccessToken(refreshToken: string): Promise<string | null> {
   try {
@@ -21,6 +24,7 @@ async function refreshAccessToken(refreshToken: string): Promise<string | null> 
 
 /**
  * Runs before every page: keeps the session fresh, protects /dashboard by role,
+ * requires sign-in for payment results and request details,
  * and keeps signed-in users out of the sign-in pages. The backend still checks
  * every API call — this is for routing, not security on its own.
  */
@@ -37,7 +41,11 @@ export async function proxy(request: NextRequest) {
   const user = access && !isExpired(access, 0) ? decodeToken(access) : null;
 
   let response: NextResponse;
-  if (pathname.startsWith("/dashboard")) {
+  if (isSignedInOnly(pathname) && !user) {
+    const login = new URL("/auth/login", request.url);
+    login.searchParams.set("next", pathname + search);
+    response = NextResponse.redirect(login);
+  } else if (pathname.startsWith("/dashboard")) {
     if (!user) {
       const login = new URL("/auth/login", request.url);
       login.searchParams.set("next", pathname + search);
