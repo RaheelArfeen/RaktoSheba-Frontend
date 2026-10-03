@@ -29,7 +29,7 @@ export default async function HospitalDashboard({ searchParams }: PageProps<"/da
 
       <div>
         <Eyebrow>Hospital workspace</Eyebrow>
-        <h1 className="mt-2 font-display text-5xl tracking-[-.015em]">{hospital?.name ?? "Your hospital"}</h1>
+        <h1 className="mt-2 font-display text-4xl sm:text-5xl tracking-[-.015em]">{hospital?.name ?? "Your hospital"}</h1>
         {hospital && (
           <p className="mt-2 flex items-center gap-1.5 text-ink-muted">
             <MapPin size={15} /> {hospital.address}

@@ -24,7 +24,7 @@ export default function DonatePage() {
         <div className="absolute -top-24 -right-24 -z-10 size-[380px] rounded-full bg-mint/40 blur-3xl" />
         <Container className="py-14 sm:py-16">
           <Eyebrow>Become a donor</Eyebrow>
-          <h1 className="mt-4 max-w-[820px] font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">Can I donate blood?</h1>
+          <h1 className="mt-4 max-w-[820px] font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">Can I donate blood?</h1>
           <p className="mt-5 max-w-[620px] text-[17px] leading-8 text-ink-muted">
             Most healthy adults can. Answer a few questions to find out in under a minute—no account needed.
           </p>
@@ -58,7 +58,7 @@ export default function DonatePage() {
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
             <div className="max-w-[620px]">
               <Eyebrow className="mb-4 text-sand-deep">Compatibility chart</Eyebrow>
-              <h2 className="font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">Who can you help?</h2>
+              <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">Who can you help?</h2>
             </div>
             <p className="max-w-[420px] leading-7 text-ink-muted">Read across from your blood group. A filled dot means your blood can be given safely to that patient.</p>
           </div>

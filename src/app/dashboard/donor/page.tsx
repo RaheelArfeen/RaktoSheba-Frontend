@@ -35,7 +35,7 @@ export default async function DonorDashboard({ searchParams }: PageProps<"/dashb
 
       <div>
         <Eyebrow>Donor workspace</Eyebrow>
-        <h1 className="mt-2 font-display text-5xl tracking-[-.015em]">Good to see you.</h1>
+        <h1 className="mt-2 font-display text-4xl sm:text-5xl tracking-[-.015em]">Good to see you.</h1>
         <p className="mt-2 text-ink-muted">{session.user.email}</p>
       </div>
 
@@ -49,7 +49,7 @@ export default async function DonorDashboard({ searchParams }: PageProps<"/dashb
           <div className="rounded-[24px] border border-ink/10 bg-cream p-6">
             <Droplets className="size-5 text-blood" />
             <p className="mt-4 text-xs font-bold tracking-[.12em] text-ink-faint uppercase">Blood group</p>
-            <p className="mt-1 font-display text-5xl text-blood">{bloodGroupLabel[profile.bloodGroup]}</p>
+            <p className="mt-1 font-display text-4xl sm:text-5xl text-blood">{bloodGroupLabel[profile.bloodGroup]}</p>
           </div>
           <div className="rounded-[24px] border border-ink/10 bg-cream p-6">
             <HeartPulse className="size-5 text-forest" />

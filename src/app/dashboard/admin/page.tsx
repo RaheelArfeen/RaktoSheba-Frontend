@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
     <div className="space-y-8">
       <div>
         <Eyebrow>Admin workspace</Eyebrow>
-        <h1 className="mt-2 font-display text-5xl tracking-[-.015em]">The network, at a glance.</h1>
+        <h1 className="mt-2 font-display text-4xl sm:text-5xl tracking-[-.015em]">The network, at a glance.</h1>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

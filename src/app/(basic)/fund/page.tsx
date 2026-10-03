@@ -31,7 +31,7 @@ export default async function FundPage({ searchParams }: PageProps<"/fund">) {
         <div className="absolute -top-24 -right-24 -z-10 size-[380px] rounded-full bg-mint/40 blur-3xl" />
         <Container className="py-14 sm:py-16">
           <Eyebrow>Emergency fund</Eyebrow>
-          <h1 className="mt-4 max-w-[820px] font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">When you can&apos;t give blood, you can still help.</h1>
+          <h1 className="mt-4 max-w-[820px] font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">When you can&apos;t give blood, you can still help.</h1>
           <p className="mt-5 max-w-[620px] text-[17px] leading-8 text-ink-muted">
             Your contribution keeps the network fast and free for patients and hospitals. Every payment is processed securely by Stripe.
           </p>

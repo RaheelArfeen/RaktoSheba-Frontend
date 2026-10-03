@@ -31,7 +31,7 @@ export default async function RegisterPage({ searchParams }: PageProps<"/auth/re
 
       <div className="mx-auto w-full max-w-[520px] lg:py-6">
         <Eyebrow>Create account</Eyebrow>
-        <h1 className="mt-3 mb-8 font-display text-5xl leading-[1.08] tracking-[-.02em]">Join RaktoSheba.</h1>
+        <h1 className="mt-3 mb-8 font-display text-4xl sm:text-5xl leading-[1.08] tracking-[-.02em]">Join RaktoSheba.</h1>
         <RegisterForm initialRole={initialRole} />
       </div>
     </Container>

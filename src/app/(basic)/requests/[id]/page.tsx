@@ -67,10 +67,10 @@ export default async function RequestDetailPage({ params }: PageProps<"/requests
                   {open ? <EmergencyBadge urgency={request.urgency} /> : <StatusBadge status={request.status} />}
                   <span className="text-xs font-semibold opacity-70">Posted {timeAgo(request.createdAt)}</span>
                 </div>
-                <h1 className="mt-5 font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">{group} blood needed</h1>
+                <h1 className="mt-5 font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">{group} blood needed</h1>
                 <p className="mt-4 max-w-md leading-7 opacity-80">{open ? EMERGENCY_LEVELS[level].description : `${requestStatusLabel[request.status]}.`}</p>
               </div>
-              <div className="grid size-28 shrink-0 place-items-center rounded-[28px] bg-blush font-display text-5xl text-blood">{group}</div>
+              <div className="grid size-28 shrink-0 place-items-center rounded-[28px] bg-blush font-display text-4xl sm:text-5xl text-blood">{group}</div>
             </div>
           </div>
 

@@ -10,7 +10,7 @@ export function CtaSection() {
           <div className="absolute -top-28 -right-20 size-80 rounded-full border-[40px] border-white/10" />
           <div className="absolute -bottom-40 left-10 size-72 rounded-full border-[35px] border-white/10" />
           <p className="relative text-xs font-extrabold tracking-[.18em] text-[#f4c8b1] uppercase">Your next good day starts here</p>
-          <h2 className="relative mx-auto mt-5 max-w-[680px] font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">
+          <h2 className="relative mx-auto mt-5 max-w-[680px] font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">
             Be the reason someone gets home.
           </h2>
           <Link

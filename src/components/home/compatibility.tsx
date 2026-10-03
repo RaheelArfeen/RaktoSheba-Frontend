@@ -16,7 +16,7 @@ export function CompatibilitySection() {
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
           <div className="max-w-[620px]">
             <Eyebrow className="mb-4 text-sand-deep">Matching, made legible</Eyebrow>
-            <h2 className="font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">Compatibility is more than a dropdown.</h2>
+            <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">Compatibility is more than a dropdown.</h2>
           </div>
           <p className="max-w-[420px] leading-7 text-ink-muted">
             The matching engine looks at blood type, availability, donor eligibility and proximity together—so a “match” is actually

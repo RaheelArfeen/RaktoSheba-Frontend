@@ -50,7 +50,7 @@ export function RequestBoardSection() {
       <Container className="grid grid-cols-1 gap-14 lg:grid-cols-[.75fr_1.25fr] lg:items-start">
         <div className="max-w-[420px] lg:sticky lg:top-28">
           <Eyebrow className="mb-4">Live request board</Eyebrow>
-          <h2 className="font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">The right donor is closer than you think.</h2>
+          <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">The right donor is closer than you think.</h2>
           <p className="mt-6 leading-7 text-ink-muted">
             Hospitals post verified requests. Donors see only the matches they can safely help with—sorted by urgency and distance.
           </p>

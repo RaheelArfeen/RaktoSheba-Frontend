@@ -29,7 +29,7 @@ export function MatchLensSection() {
       <Container className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
       <div>
         <Eyebrow className="mb-4">Try the match lens</Eyebrow>
-        <h2 className="font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">What could your blood type unlock?</h2>
+        <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">What could your blood type unlock?</h2>
         <p className="mt-6 max-w-[420px] leading-7 text-ink-muted">Tap a type to see who it can help—and who can help it. No account, no form.</p>
         <div className="mt-8 grid max-w-[390px] grid-cols-4 gap-2" role="group" aria-label="Choose a blood type">
           {BLOOD_GROUPS.map((group) => (

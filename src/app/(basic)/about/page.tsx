@@ -30,7 +30,7 @@ export default function AboutPage() {
         <div className="absolute -top-24 -right-24 -z-10 size-[380px] rounded-full bg-mint/40 blur-3xl" />
         <Container className="py-14 sm:py-16">
           <Eyebrow>About RaktoSheba</Eyebrow>
-          <h1 className="mt-4 max-w-[820px] font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">
+          <h1 className="mt-4 max-w-[820px] font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">
             Blood shouldn&apos;t depend on who you happen to know.
           </h1>
           <p className="mt-5 max-w-[620px] text-[17px] leading-8 text-ink-muted">
@@ -46,7 +46,7 @@ export default function AboutPage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
           <div className="max-w-[620px]">
             <Eyebrow className="mb-4">Our principles</Eyebrow>
-            <h2 className="font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">Care, built into the system.</h2>
+            <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">Care, built into the system.</h2>
           </div>
           <p className="max-w-[420px] leading-7 text-ink-muted">RaktoSheba is designed so the safe path is also the fastest one.</p>
         </div>
@@ -64,7 +64,7 @@ export default function AboutPage() {
       <section className="border-y border-ink/10 bg-cream py-20">
         <Container>
           <Eyebrow className="mb-4">Three roles, one network</Eyebrow>
-          <h2 className="font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">Everyone sees what they need.</h2>
+          <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">Everyone sees what they need.</h2>
           <div className="mt-12 grid gap-4 md:grid-cols-3">
             {roles.map(({ icon: Icon, tone, title, text }) => (
               <div key={title} className="rounded-[24px] border border-ink/10 bg-paper p-7">
@@ -80,7 +80,7 @@ export default function AboutPage() {
       </section>
 
       <Container className="py-20 text-center">
-        <h2 className="mx-auto max-w-2xl font-display text-5xl leading-[1.08] tracking-[-.02em]">Ready to be someone&apos;s match?</h2>
+        <h2 className="mx-auto max-w-2xl font-display text-4xl sm:text-5xl leading-[1.08] tracking-[-.02em]">Ready to be someone&apos;s match?</h2>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <ButtonLink href="/donate" size="lg">
             Check if you can donate <ArrowRight />

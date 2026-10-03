@@ -26,7 +26,7 @@ export default async function OnboardingPage({ searchParams }: PageProps<"/onboa
     <Container className="py-14 sm:py-20">
       <div className="mx-auto max-w-[520px]">
         <Eyebrow>One last step</Eyebrow>
-        <h1 className="mt-3 font-display text-5xl leading-[1.08] tracking-[-.02em]">{role === "DONOR" ? "What's your blood group?" : "Tell us about your hospital."}</h1>
+        <h1 className="mt-3 font-display text-4xl sm:text-5xl leading-[1.08] tracking-[-.02em]">{role === "DONOR" ? "What's your blood group?" : "Tell us about your hospital."}</h1>
         <p className="mt-4 mb-8 leading-7 text-ink-muted">Signed in as {session.user.email}. This takes a few seconds.</p>
         <OnboardingForm role={role} next={nextPath} />
       </div>

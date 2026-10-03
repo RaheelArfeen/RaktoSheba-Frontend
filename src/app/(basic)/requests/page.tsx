@@ -28,7 +28,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/request
         <div className="absolute -top-24 -right-24 -z-10 size-[380px] rounded-full bg-mint/40 blur-3xl" />
         <Container className="py-14 sm:py-16">
           <Eyebrow>Live request board</Eyebrow>
-          <h1 className="mt-4 max-w-[820px] font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">Someone nearby needs your help.</h1>
+          <h1 className="mt-4 max-w-[820px] font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">Someone nearby needs your help.</h1>
           <p className="mt-5 max-w-[620px] text-[17px] leading-8 text-ink-muted">
             Every request here was verified by our team. Filter by your blood group and area to see where you can make a difference.
           </p>

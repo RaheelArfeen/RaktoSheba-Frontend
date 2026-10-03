@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Atkinson_Hyperlegible_Next, Bricolage_Grotesque } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Unbounded } from "next/font/google";
 import { Toaster } from "sonner";
 import { AppShell } from "@/components/layout/app-shell";
 import { EmergencyBanner } from "@/components/layout/emergency-banner";
@@ -10,10 +10,10 @@ import { env } from "@/config/env";
 import { getSession } from "@/lib/session";
 import "./globals.css";
 
-// Headings: a characterful grotesque that stays clear and punchy at large sizes.
-const heading = Bricolage_Grotesque({
+// Headings: wide, rounded and distinctive — the open letter shapes stay readable from far away.
+const heading = Unbounded({
   variable: "--font-heading",
-  weight: ["600", "700", "800"],
+  weight: ["500", "600", "700"],
   subsets: ["latin"],
 });
 

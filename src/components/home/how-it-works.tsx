@@ -9,7 +9,7 @@ export function HowItWorksSection() {
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
           <div className="max-w-[620px]">
             <Eyebrow className="mb-4 text-mint-strong">How it works</Eyebrow>
-            <h2 className="font-display text-5xl leading-[1.08] tracking-[-.02em] sm:text-6xl">
+            <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">
               Simple steps.
               <br />
               Meaningful impact.
