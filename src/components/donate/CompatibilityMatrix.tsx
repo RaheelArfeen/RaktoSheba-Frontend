@@ -3,7 +3,7 @@ import { BLOOD_GROUPS, bloodGroupLabel, canDonate } from "@/lib/blood";
 // Full donor → recipient chart, computed from the same rule the backend uses.
 export default function CompatibilityMatrix() {
   return (
-    <div className="overflow-x-auto rounded-[26px] border border-ink/10 bg-cream p-4 sm:p-6">
+    <div className="relative overflow-x-auto rounded-[26px] border border-ink/10 bg-cream p-4 sm:p-6">
       <table className="w-full min-w-[560px] table-fixed border-collapse text-center">
         <caption className="sr-only">Blood compatibility: which donor groups can give to which recipients</caption>
         <thead>
