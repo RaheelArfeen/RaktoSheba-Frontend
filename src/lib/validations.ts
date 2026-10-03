@@ -111,3 +111,35 @@ export const registerSchema = z.discriminatedUnion("role", [
 ]);
 
 export type RegisterValues = z.infer<typeof registerSchema>;
+
+/**
+ * The sign-up wizard's flat form shape. Each step validates only its own fields;
+ * the final values are turned into `RegisterValues` for the server action.
+ */
+export const registerFormSchema = z
+  .object({
+    role: z.enum(["DONOR", "HOSPITAL"], { error: "Choose how you'll use RaktoSheba." }),
+    email: accountFields.email,
+    password: accountFields.password,
+    confirmPassword: z.string(),
+    bloodGroup: z.string().optional(),
+    hospitalName: z.string().optional(),
+    hospitalAddress: z.string().optional(),
+  })
+  .superRefine((v, ctx) => {
+    if (v.confirmPassword !== v.password) ctx.addIssue({ code: "custom", path: ["confirmPassword"], message: "Passwords don't match." });
+    if (v.role === "DONOR" && !BLOOD_GROUPS.includes(v.bloodGroup as (typeof BLOOD_GROUPS)[number]))
+      ctx.addIssue({ code: "custom", path: ["bloodGroup"], message: "Choose your blood group." });
+    if (v.role === "HOSPITAL") {
+      if ((v.hospitalName ?? "").trim().length < 2) ctx.addIssue({ code: "custom", path: ["hospitalName"], message: "Enter the hospital's name." });
+      if ((v.hospitalAddress ?? "").trim().length < 5) ctx.addIssue({ code: "custom", path: ["hospitalAddress"], message: "Enter the full address." });
+    }
+  });
+
+export type RegisterFormValues = z.infer<typeof registerFormSchema>;
+
+export const registerSteps: (keyof RegisterFormValues)[][] = [
+  ["role"],
+  ["email", "password", "confirmPassword"],
+  ["bloodGroup", "hospitalName", "hospitalAddress"],
+];
