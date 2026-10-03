@@ -37,7 +37,7 @@ export const footerNav = [
 
 export const contact = {
   email: "hello@raktosheba.org",
-  emergencyLine: "16263",
+  emergencyLine: "12345",
   city: "Dhaka, Bangladesh",
   apiDocs: `${API_BASE_URL}/api/v1/docs`,
 };
