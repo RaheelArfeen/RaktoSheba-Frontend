@@ -84,3 +84,30 @@ export const fundSchema = z.object({
 
 export type FundInput = z.input<typeof fundSchema>;
 export type FundValues = z.output<typeof fundSchema>;
+
+// ---- Auth ----
+
+export const loginSchema = z.object({
+  email: z.email("Enter a valid email address."),
+  password: z.string().min(1, "Enter your password."),
+});
+
+export type LoginValues = z.infer<typeof loginSchema>;
+
+const accountFields = {
+  email: z.email("Enter a valid email address."),
+  password: z.string().min(6, "Use at least 6 characters.").max(72, "Use 72 characters or fewer."),
+};
+
+// Matches the backend rules: donors need a blood group, hospitals a name (2+) and address (5+).
+export const registerSchema = z.discriminatedUnion("role", [
+  z.object({ role: z.literal("DONOR"), ...accountFields, bloodGroup: z.enum(BLOOD_GROUPS as [string, ...string[]], { error: "Choose your blood group." }) }),
+  z.object({
+    role: z.literal("HOSPITAL"),
+    ...accountFields,
+    hospitalName: z.string().trim().min(2, "Enter the hospital's name.").max(120, "Keep it under 120 characters."),
+    hospitalAddress: z.string().trim().min(5, "Enter the full address.").max(200, "Keep it under 200 characters."),
+  }),
+]);
+
+export type RegisterValues = z.infer<typeof registerSchema>;
