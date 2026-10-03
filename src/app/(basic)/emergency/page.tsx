@@ -34,7 +34,7 @@ async function EmergencyRequests() {
     );
   }
   return (
-    <div className="grid gap-3 xl:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
       {board.data.map((request) => (
         <RequestCard key={request.id} request={request} />
       ))}
@@ -124,7 +124,7 @@ export default function EmergencyPage() {
           <div className="mt-8">
             <Suspense
               fallback={
-                <div className="grid gap-3 xl:grid-cols-2">
+                <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
                   <RequestCardSkeleton />
                   <RequestCardSkeleton />
                 </div>

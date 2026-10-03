@@ -47,7 +47,7 @@ async function UrgentRequests() {
 export function RequestBoardSection() {
   return (
     <section id="urgent-requests" className="scroll-mt-24 py-24">
-      <Container className="grid gap-14 lg:grid-cols-[.75fr_1.25fr] lg:items-start">
+      <Container className="grid grid-cols-1 gap-14 lg:grid-cols-[.75fr_1.25fr] lg:items-start">
         <div className="max-w-[420px] lg:sticky lg:top-28">
           <Eyebrow className="mb-4">Live request board</Eyebrow>
           <h2 className="font-display text-5xl leading-[.96] tracking-[-.06em] sm:text-6xl">The right donor is closer than you think.</h2>
