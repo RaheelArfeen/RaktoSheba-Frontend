@@ -87,7 +87,7 @@ export function SummaryWizard() {
           </span>
           <div>
             <Eyebrow className="text-forest">Summary ready</Eyebrow>
-            <p className="mt-1 font-display text-2xl text-forest-deep">Share it with the hospital or family</p>
+            <p className="mt-1 font-display text-xl text-forest-deep">Share it with the hospital or family</p>
           </div>
         </div>
         <pre className="mt-6 rounded-2xl bg-cream/80 p-4 font-sans text-sm leading-6 whitespace-pre-wrap text-ink">{summaryText(summary)}</pre>
@@ -176,7 +176,7 @@ export function SummaryWizard() {
               <Label htmlFor="units" className="mb-0">
                 Units needed
               </Label>
-              <span className="font-display text-2xl text-blood">{String(units ?? "")}</span>
+              <span className="font-display text-xl text-blood">{String(units ?? "")}</span>
             </div>
             <input id="units" type="range" min={1} max={10} className="mt-2 w-full accent-blood" {...register("units")} />
             <FieldError message={errors.units?.message} />

@@ -29,7 +29,7 @@ export function MatchLensSection() {
       <Container className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
       <div>
         <Eyebrow className="mb-4">Try the match lens</Eyebrow>
-        <h2 className="font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">What could your blood type unlock?</h2>
+        <h2 className="font-display text-3xl leading-[1.08] tracking-[-.02em] sm:text-4xl lg:text-5xl">What could your blood type unlock?</h2>
         <p className="mt-6 max-w-[420px] leading-7 text-ink-muted">Tap a type to see who it can help—and who can help it. No account, no form.</p>
         <div className="mt-8 grid max-w-[390px] grid-cols-4 gap-2" role="group" aria-label="Choose a blood type">
           {BLOOD_GROUPS.map((group) => (
@@ -57,7 +57,7 @@ export function MatchLensSection() {
           <div className="flex items-start justify-between gap-6">
             <div>
               <Eyebrow className="text-mint-strong">Selected blood type</Eyebrow>
-              <p className="mt-3 font-display text-7xl tracking-[-.02em] text-peach">{bloodGroupLabel[selected]}</p>
+              <p className="mt-3 font-display text-6xl tracking-[-.02em] text-peach">{bloodGroupLabel[selected]}</p>
             </div>
             <span className="grid size-12 place-items-center rounded-2xl bg-white/10 text-mint-strong">
               <HandHeart size={24} />

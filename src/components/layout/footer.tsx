@@ -16,7 +16,7 @@ export function SiteFooter({ showEmergency = true }: { showEmergency?: boolean }
           <div className="pointer-events-none absolute -top-24 -right-16 size-64 rounded-full border-[32px] border-white/[.06]" />
           <div className="relative">
             <Eyebrow className="text-mint-strong">In an emergency?</Eyebrow>
-            <p className="mt-2 max-w-xl font-display text-3xl leading-[1.15] tracking-[-.01em] sm:text-4xl">
+            <p className="mt-2 max-w-xl font-display text-2xl leading-[1.15] tracking-[-.01em] sm:text-3xl">
               Get help now—no account needed.
             </p>
           </div>
@@ -43,7 +43,7 @@ export function SiteFooter({ showEmergency = true }: { showEmergency?: boolean }
           most.
         </p>
         <p className="mt-5 text-sm font-bold text-ink-soft">
-          Emergency line <span className="font-display text-xl text-blood">{contact.emergencyLine}</span>
+          Emergency line <span className="font-display text-lg text-blood">{contact.emergencyLine}</span>
         </p>
       </div>
       {footerNav.map((group) => (

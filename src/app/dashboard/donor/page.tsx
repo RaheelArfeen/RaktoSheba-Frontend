@@ -35,13 +35,13 @@ export default async function DonorDashboard({ searchParams }: PageProps<"/dashb
 
       <div>
         <Eyebrow>Donor workspace</Eyebrow>
-        <h1 className="mt-2 font-display text-4xl sm:text-5xl tracking-[-.015em]">Good to see you.</h1>
+        <h1 className="mt-2 font-display text-3xl sm:text-4xl tracking-[-.015em]">Good to see you.</h1>
         <p className="mt-2 text-ink-muted">{session.user.email}</p>
       </div>
 
       {!profile ? (
         <div className="rounded-[26px] border border-dashed border-ink/15 bg-cream p-8">
-          <p className="font-display text-2xl tracking-[-.01em]">Your donor profile isn&apos;t set up yet.</p>
+          <p className="font-display text-xl tracking-[-.01em]">Your donor profile isn&apos;t set up yet.</p>
           <p className="mt-2 text-sm text-ink-muted">Add your blood group so we can match you with requests. Profile editing arrives in the next update.</p>
         </div>
       ) : (
@@ -49,18 +49,18 @@ export default async function DonorDashboard({ searchParams }: PageProps<"/dashb
           <div className="rounded-[24px] border border-ink/10 bg-cream p-6">
             <Droplets className="size-5 text-blood" />
             <p className="mt-4 text-xs font-bold tracking-[.12em] text-ink-faint uppercase">Blood group</p>
-            <p className="mt-1 font-display text-4xl sm:text-5xl text-blood">{bloodGroupLabel[profile.bloodGroup]}</p>
+            <p className="mt-1 font-display text-3xl sm:text-4xl text-blood">{bloodGroupLabel[profile.bloodGroup]}</p>
           </div>
           <div className="rounded-[24px] border border-ink/10 bg-cream p-6">
             <HeartPulse className="size-5 text-forest" />
             <p className="mt-4 text-xs font-bold tracking-[.12em] text-ink-faint uppercase">Availability</p>
-            <p className="mt-1 font-display text-3xl">{profile.isAvailable ? "Available" : "Taking a break"}</p>
+            <p className="mt-1 font-display text-2xl">{profile.isAvailable ? "Available" : "Taking a break"}</p>
             <p className="mt-1 text-sm text-ink-muted">{profile.isAvailable ? "You'll see compatible requests." : "You won't get new match alerts."}</p>
           </div>
           <div className="rounded-[24px] border border-ink/10 bg-cream p-6">
             {profile.isEligible ? <CheckCircle2 className="size-5 text-forest" /> : <CalendarClock className="size-5 text-sand-deep" />}
             <p className="mt-4 text-xs font-bold tracking-[.12em] text-ink-faint uppercase">Eligibility</p>
-            <p className="mt-1 font-display text-3xl">{profile.isEligible ? "Ready to donate" : `${waitDays} days to go`}</p>
+            <p className="mt-1 font-display text-2xl">{profile.isEligible ? "Ready to donate" : `${waitDays} days to go`}</p>
             <p className="mt-1 text-sm text-ink-muted">
               {profile.lastDonationAt ? `Last donated ${formatDate(profile.lastDonationAt)}` : "No donations recorded yet."}
               {!profile.isEligible && nextEligible && ` · eligible from ${formatDate(nextEligible)}`}

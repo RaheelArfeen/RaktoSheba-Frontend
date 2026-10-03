@@ -14,7 +14,7 @@ export default function NotFound() {
           <Compass className="size-9" />
         </span>
         <div className="max-w-md space-y-2">
-          <h1 className="font-display text-4xl sm:text-5xl tracking-[-.015em]">Nothing here.</h1>
+          <h1 className="font-display text-3xl sm:text-4xl tracking-[-.015em]">Nothing here.</h1>
           <p className="text-sm leading-relaxed text-ink-muted">The page you&apos;re looking for doesn&apos;t exist, or it may have been moved.</p>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-3">

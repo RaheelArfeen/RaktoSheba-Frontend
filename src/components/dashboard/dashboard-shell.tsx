@@ -42,7 +42,7 @@ function Sidebar({ user, onNavigate }: { user: AuthUser; onNavigate?: () => void
           <span className="absolute -top-1.5 right-0 size-3 rounded-full bg-mint-strong" />
           <HeartPulse size={22} strokeWidth={2.2} aria-hidden />
         </span>
-        <span className="font-display text-[22px] tracking-[-.01em] text-cream">RaktoSheba</span>
+        <span className="font-display text-lg tracking-[-.01em] text-cream">RaktoSheba</span>
       </Link>
       <p className="mt-12 px-3 text-[10px] font-extrabold tracking-[.18em] text-[#f2d8ca]/50 uppercase">{roleLabel[user.role]} workspace</p>
       <div className="mt-3">
@@ -52,7 +52,7 @@ function Sidebar({ user, onNavigate }: { user: AuthUser; onNavigate?: () => void
         <NavLinks items={[siteLink]} onNavigate={onNavigate} />
         <div className="rounded-2xl border border-white/10 bg-white/[.06] p-4">
           <div className="flex items-center gap-3">
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-peach font-display text-lg text-maroon">{user.email[0]?.toUpperCase()}</span>
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-peach font-display text-base text-maroon">{user.email[0]?.toUpperCase()}</span>
             <div className="min-w-0">
               <p className="truncate text-sm font-bold text-cream">{user.email}</p>
               <p className="mt-0.5 text-[10px] font-bold tracking-[.12em] text-[#f2d8ca]/60 uppercase">{roleLabel[user.role]}</p>
@@ -103,7 +103,7 @@ export function DashboardShell({ user, children }: { user: AuthUser; children: R
           <button type="button" onClick={() => setOpen(true)} aria-label="Open menu" className="grid size-10 place-items-center rounded-full text-ink-muted hover:bg-linen">
             <Menu size={20} />
           </button>
-          <p className="font-display text-xl tracking-[-.01em]">{roleLabel[user.role]} workspace</p>
+          <p className="font-display text-lg tracking-[-.01em]">{roleLabel[user.role]} workspace</p>
         </header>
         <main className="mx-auto max-w-[1250px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">{children}</main>
       </div>

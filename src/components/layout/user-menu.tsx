@@ -36,7 +36,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
         aria-haspopup="menu"
         className="flex items-center gap-2 rounded-full border border-ink/10 bg-cream/70 py-1 pr-3 pl-1 transition-colors hover:border-blood/25"
       >
-        <span className="grid size-8 place-items-center rounded-full bg-peach font-display text-base text-maroon">{user.email[0]?.toUpperCase()}</span>
+        <span className="grid size-8 place-items-center rounded-full bg-peach font-display text-sm text-maroon">{user.email[0]?.toUpperCase()}</span>
         <ChevronDown size={15} className={cn("text-ink-muted transition-transform", open && "rotate-180")} />
       </button>
       {open && (

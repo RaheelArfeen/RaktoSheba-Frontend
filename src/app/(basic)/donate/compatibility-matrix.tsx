@@ -12,7 +12,7 @@ export function CompatibilityMatrix() {
               Donor ↓ · Patient →
             </th>
             {BLOOD_GROUPS.map((g) => (
-              <th key={g} scope="col" className="border-b border-ink/15 p-2 font-display text-xl font-normal">
+              <th key={g} scope="col" className="border-b border-ink/15 p-2 font-display text-lg font-normal">
                 {bloodGroupLabel[g]}
               </th>
             ))}
@@ -21,7 +21,7 @@ export function CompatibilityMatrix() {
         <tbody>
           {BLOOD_GROUPS.map((donor) => (
             <tr key={donor} className="group">
-              <th scope="row" className="border-r border-ink/15 p-2 text-left font-display text-xl font-normal group-hover:text-blood">
+              <th scope="row" className="border-r border-ink/15 p-2 text-left font-display text-lg font-normal group-hover:text-blood">
                 {bloodGroupLabel[donor]}
               </th>
               {BLOOD_GROUPS.map((recipient) => {

@@ -51,7 +51,7 @@ export function RequestCard({ request }: { request: PublicRequest }) {
       </div>
       <div className="flex items-center justify-between gap-5 border-t border-ink/10 pt-3 sm:border-t-0 sm:pt-0">
         <div>
-          <p className="font-display text-xl whitespace-nowrap">{unitsLabel(request.unitsNeeded)}</p>
+          <p className="font-display text-lg whitespace-nowrap">{unitsLabel(request.unitsNeeded)}</p>
           <p className="text-[10px] font-bold tracking-[.12em] text-ink-faint uppercase">Needed</p>
         </div>
         <div className="flex items-center gap-3">

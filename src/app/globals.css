@@ -85,11 +85,15 @@
   body {
     @apply bg-background font-sans text-foreground;
   }
-  /* Headings are bold by default; a utility like font-semibold can still override it. */
+  /* Headings are semibold by default; a utility like font-semibold can still override it. */
   .font-display {
-    font-weight: 700;
-    /* The heading font is wide; if a long word can't fit on a phone, hyphenate it instead of overflowing. */
-    hyphens: auto;
+    font-weight: 600;
+  }
+  /* The heading font is wide; if a long word can't fit on a phone, hyphenate it instead of overflowing. */
+  @media (width < 40rem) {
+    .font-display {
+      hyphens: auto;
+    }
   }
   button,
   a,

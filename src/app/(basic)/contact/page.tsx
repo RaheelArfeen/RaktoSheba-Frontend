@@ -24,7 +24,7 @@ export default function ContactPage() {
         <div className="absolute -top-24 -right-24 -z-10 size-[380px] rounded-full bg-mint/40 blur-3xl" />
         <Container className="py-14 sm:py-16">
           <Eyebrow>Contact</Eyebrow>
-          <h1 className="mt-4 max-w-[820px] font-display text-4xl leading-[1.08] tracking-[-.02em] sm:text-5xl lg:text-6xl">We&apos;re here to help.</h1>
+          <h1 className="mt-4 max-w-[820px] font-display text-3xl leading-[1.08] tracking-[-.02em] sm:text-4xl lg:text-5xl">We&apos;re here to help.</h1>
           <p className="mt-5 max-w-[620px] text-[17px] leading-8 text-ink-muted">
             For anything urgent, call the emergency line. For everything else, send us a message and we&apos;ll get back to you.
           </p>
