@@ -3,14 +3,17 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CircleAlert, Menu, X } from "lucide-react";
+import { CircleAlert, LayoutDashboard, LogOut, Menu, X } from "lucide-react";
+import { logout } from "@/app/actions/auth";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { publicNav } from "@/lib/site";
+import type { AuthUser } from "@/types";
 import { Logo } from "./logo";
+import { UserMenu } from "./user-menu";
 
 // Public site header: logo, pill navigation, emergency + sign-in links, and a slide-out menu on phones.
-export function SiteHeader() {
+export function SiteHeader({ user }: { user?: AuthUser | null }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -54,9 +57,20 @@ export function SiteHeader() {
           <ButtonLink href="/emergency" variant="soft" size="sm" className="hidden sm:inline-flex">
             <CircleAlert /> Emergency help
           </ButtonLink>
-          <ButtonLink href="/auth/login" variant="ghost" className="hidden sm:inline-flex">
-            Sign in
-          </ButtonLink>
+          {user ? (
+            <>
+              <ButtonLink href={`/dashboard/${user.role.toLowerCase()}`} size="sm" className="hidden sm:inline-flex">
+                <LayoutDashboard /> Dashboard
+              </ButtonLink>
+              <div className="hidden sm:block">
+                <UserMenu user={user} />
+              </div>
+            </>
+          ) : (
+            <ButtonLink href="/auth/login" variant="ghost" className="hidden sm:inline-flex">
+              Sign in
+            </ButtonLink>
+          )}
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -103,9 +117,23 @@ export function SiteHeader() {
               <ButtonLink href="/emergency" variant="soft" onClick={() => setOpen(false)} className="justify-start rounded-2xl">
                 <CircleAlert /> Emergency help — no login
               </ButtonLink>
-              <ButtonLink href="/auth/login" variant="outline" onClick={() => setOpen(false)}>
-                Sign in
-              </ButtonLink>
+              {user ? (
+                <>
+                  <ButtonLink href={`/dashboard/${user.role.toLowerCase()}`} onClick={() => setOpen(false)}>
+                    <LayoutDashboard /> Dashboard
+                  </ButtonLink>
+                  <form action={logout}>
+                    <button type="submit" className="flex h-11 w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-cream/70 text-sm font-bold text-ink-soft">
+                      <LogOut size={16} /> Sign out
+                    </button>
+                  </form>
+                  <p className="truncate text-center text-xs text-ink-faint">Signed in as {user.email}</p>
+                </>
+              ) : (
+                <ButtonLink href="/auth/login" variant="outline" onClick={() => setOpen(false)}>
+                  Sign in
+                </ButtonLink>
+              )}
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/layout/footer";
 import { SiteHeader } from "@/components/layout/header";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { env } from "@/config/env";
+import { getSession } from "@/lib/session";
 import "./globals.css";
 
 const display = DM_Serif_Display({
@@ -47,7 +48,9 @@ export const viewport: Viewport = {
   themeColor: "#611a23",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const session = await getSession();
+
   return (
     <html
       lang="en"
@@ -60,7 +63,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             header={
               <>
                 <EmergencyBanner />
-                <SiteHeader />
+                <SiteHeader user={session?.user} />
               </>
             }
             footer={<SiteFooter />}
