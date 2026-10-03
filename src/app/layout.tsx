@@ -66,7 +66,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 <SiteHeader user={session?.user} />
               </>
             }
-            footer={<SiteFooter />}
+            footer={<SiteFooter showEmergency={session?.user.role !== "HOSPITAL"} />}
           >
             {children}
           </AppShell>
