@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { ArrowLeft, ArrowRight, Building2, CalendarClock, Droplets, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, CalendarClock, CircleCheck, CircleX, Droplets, MapPin, Navigation } from "lucide-react";
 import { StatusTimeline } from "@/components/request/status-timeline";
 import { EmergencyBadge, StatusBadge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { ApiError } from "@/lib/api";
-import { bloodGroupLabel, compatibleDonors } from "@/lib/blood";
+import { bloodGroupLabel, canDonate, compatibleDonors } from "@/lib/blood";
 import { cn } from "@/lib/cn";
 import { EMERGENCY_LEVELS, emergencyLevel, requestStatusLabel } from "@/lib/emergency";
 import { formatDateTime, timeAgo, unitsLabel } from "@/lib/format";
+import { donorApi } from "@/lib/donors";
 import { publicApi } from "@/lib/requests";
 import { getSession } from "@/lib/session";
 import { ShareButton } from "../components/share-button";
@@ -40,11 +41,15 @@ export async function generateMetadata({ params }: PageProps<"/requests/[id]">):
 export default async function RequestDetailPage({ params }: PageProps<"/requests/[id]">) {
   const [request, session] = await Promise.all([getRequest((await params).id), getSession()]);
   const isDonor = session?.user.role === "DONOR";
+  // A signed-in donor sees straight away whether their own blood can help this patient.
+  const myGroup = isDonor ? await donorApi.me(session.accessToken).then((p) => p.bloodGroup).catch(() => null) : null;
+  const iMatch = myGroup ? canDonate(myGroup, request.bloodGroup) : null;
   const level = emergencyLevel(request.urgency);
   const open = request.status === "VERIFIED";
   const group = bloodGroupLabel[request.bloodGroup];
   const donors = compatibleDonors(request.bloodGroup);
   const emergencyCard = open && (level === "critical" || level === "severe");
+  const address = request.hospital ? `${request.hospital.name}, ${request.hospital.address}` : null;
   const facts = [
     { icon: Droplets, label: "Units needed", value: unitsLabel(request.unitsNeeded) },
     { icon: Building2, label: "Hospital", value: request.hospital?.name ?? "Partner hospital" },
@@ -104,17 +109,40 @@ export default async function RequestDetailPage({ params }: PageProps<"/requests
             <Eyebrow>Where</Eyebrow>
             <p className="mt-3 font-display text-xl tracking-[-.01em]">{request.hospital?.name ?? "Partner hospital"}</p>
             <p className="mt-2 flex items-center gap-1.5 text-sm text-ink-muted">
-              <MapPin size={14} /> {request.hospital?.address ?? "Bangladesh"}
+              <MapPin size={14} className="shrink-0" /> {request.hospital?.address ?? "Bangladesh"}
             </p>
-            {open && isDonor && (
+            {address && (
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-blood hover:underline"
+              >
+                <Navigation size={14} /> Get directions
+              </a>
+            )}
+            {open && myGroup && (
+              <p
+                className={cn(
+                  "mt-5 flex items-start gap-2 rounded-2xl px-4 py-3 text-sm font-semibold",
+                  iMatch ? "bg-mint text-forest" : "bg-linen text-ink-muted",
+                )}
+              >
+                {iMatch ? <CircleCheck size={18} className="mt-px shrink-0" /> : <CircleX size={18} className="mt-px shrink-0" />}
+                {iMatch
+                  ? `Your ${bloodGroupLabel[myGroup]} blood is a match for this patient.`
+                  : `Your ${bloodGroupLabel[myGroup]} blood can't be given to this patient—but sharing this page can still help.`}
+              </p>
+            )}
+            {open && isDonor && iMatch !== false && (
               <ButtonLink href={`/dashboard/donor?request=${request.id}`} className="mt-6 w-full">
                 I can help <ArrowRight />
               </ButtonLink>
             )}
-            <div className={open && isDonor ? "mt-3" : "mt-6"}>
+            <div className={open && isDonor && iMatch !== false ? "mt-3" : "mt-6"}>
               <ShareButton title={`${group} blood needed`} text={`${group} blood is needed at ${request.hospital?.name ?? "a hospital"}. Can you help?`} />
             </div>
-            {open && isDonor && (
+            {open && isDonor && iMatch !== false && (
               <p className="mt-4 text-xs leading-5 text-ink-faint">We check your blood group and eligibility before confirming the match.</p>
             )}
             {open && !isDonor && <p className="mt-4 text-xs leading-5 text-ink-faint">Only donors can accept requests. Share this page with someone who can help.</p>}
