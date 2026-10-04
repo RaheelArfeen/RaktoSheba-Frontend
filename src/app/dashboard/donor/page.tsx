@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CalendarClock, CheckCircle2, Droplets, HeartHandshake, Info, PartyPopper } from "lucide-react";
-import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { ApiError } from "@/lib/api";
 import { bloodGroupLabel, DONATION_INTERVAL_DAYS } from "@/lib/blood";
@@ -12,6 +11,7 @@ import { ActiveDonationCard } from "./components/active-donation-card";
 import { AvailabilityToggle } from "./components/availability-toggle";
 import { acceptBlocker, findActiveDonation } from "./components/blockers";
 import { MatchCard } from "./components/match-card";
+import { NoProfile } from "./components/no-profile";
 
 export const metadata: Metadata = { title: "Donor dashboard" };
 
@@ -29,13 +29,7 @@ export default async function DonorDashboard({ searchParams }: PageProps<"/dashb
     return (
       <div className="space-y-8">
         <Header email={session.user.email} />
-        <div className="rounded-[26px] border border-dashed border-ink/15 bg-cream p-8">
-          <p className="font-display text-xl tracking-[-.01em]">Let&apos;s finish your donor profile.</p>
-          <p className="mt-2 text-sm text-ink-muted">Tell us your blood group so we can show you the requests you can help.</p>
-          <ButtonLink href="/onboarding?next=/dashboard/donor" className="mt-6">
-            Add my blood group <ArrowRight />
-          </ButtonLink>
-        </div>
+        <NoProfile />
       </div>
     );
   }
