@@ -74,7 +74,7 @@ export function HeroSection() {
           <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-blood/20 bg-cream/75 px-3.5 py-2 text-xs font-bold tracking-[.14em] text-blood uppercase shadow-sm">
             <Sparkles size={14} /> Blood, when it matters
           </div>
-          <h1 className="font-display text-[clamp(2.75rem,5.5vw,5.25rem)] leading-[1.05] tracking-[-.02em]">
+          <h1 className="font-display text-[clamp(2.25rem,4vw,3.75rem)] leading-[1.1] tracking-[-.02em]">
             One small act.
             <br />
             <span className="text-blood">A whole life</span> ahead.
