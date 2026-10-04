@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { BLOOD_GROUPS } from "@/lib/blood";
+import type { BloodGroup } from "@/types";
 
 // ---- Eligibility ----
 
@@ -157,3 +158,21 @@ export const hospitalProfileSchema = z.object({
 
 export type DonorProfileValues = z.infer<typeof donorProfileSchema>;
 export type HospitalProfileValues = z.infer<typeof hospitalProfileSchema>;
+
+// ---- Donor profile editing -------------------------------------------------
+
+const todayInDhaka = () => new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
+
+export const donorEditSchema = z.object({
+  bloodGroup: z.enum(BLOOD_GROUPS as [BloodGroup, ...BloodGroup[]], { error: "Choose your blood group." }),
+  /** "YYYY-MM-DD" from a date input, or empty if they've never donated. */
+  lastDonationAt: z
+    .string()
+    .optional()
+    .refine((v) => !v || /^\d{4}-\d{2}-\d{2}$/.test(v), "Enter a valid date.")
+    .refine((v) => !v || v <= todayInDhaka(), "The date can't be in the future."),
+  lat: z.number().min(-90).max(90).nullable().optional(),
+  lng: z.number().min(-180).max(180).nullable().optional(),
+});
+
+export type DonorEditValues = z.infer<typeof donorEditSchema>;

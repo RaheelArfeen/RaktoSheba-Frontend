@@ -104,6 +104,31 @@ export type Donation = {
   status: DonationStatus;
 };
 
+/** An open request the signed-in donor's blood can help, from GET /donors/me/matches. */
+export type DonorMatchRequest = {
+  id: string;
+  bloodGroup: BloodGroup;
+  unitsNeeded: number;
+  urgency: number;
+  status: RequestStatus;
+  createdAt: string;
+  hospital: { name: string; address: string } | null;
+  distanceKm: number | null;
+};
+
+/** One of the donor's own donations with its request, from GET /donors/me/donations. */
+export type MyDonation = Donation & {
+  request: {
+    id: string;
+    bloodGroup: BloodGroup;
+    unitsNeeded: number;
+    urgency: number;
+    status: RequestStatus;
+    createdAt: string;
+    requester: { hospital: { name: string; address: string } | null };
+  };
+};
+
 export type RequestHospital = { id: string; name: string; address: string; verified: boolean };
 
 export type BloodRequest = {
