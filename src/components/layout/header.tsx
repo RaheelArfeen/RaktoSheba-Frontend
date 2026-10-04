@@ -62,13 +62,10 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
 
         <div className="flex items-center gap-2">
           {showEmergency ? (
-            <ButtonLink
-              href="/emergency"
-              variant="soft"
-              size="sm"
-              className="hidden sm:inline-flex"
-            >
-              <CircleAlert /> Emergency help
+            // Always visible, even on phones: this is the one button someone in a hurry needs.
+            <ButtonLink href="/emergency" variant="soft" size="sm">
+              <CircleAlert /> <span className="sm:hidden">Help</span>
+              <span className="hidden sm:inline">Emergency help</span>
             </ButtonLink>
           ) : null}
           {user ? (
@@ -85,13 +82,23 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
               </div>
             </>
           ) : (
-            <ButtonLink
-              href="/auth/login"
-              variant="ghost"
-              className="hidden sm:inline-flex"
-            >
-              Sign in
-            </ButtonLink>
+            <>
+              <ButtonLink
+                href="/auth/login"
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex"
+              >
+                Sign in
+              </ButtonLink>
+              <ButtonLink
+                href="/auth/register"
+                size="sm"
+                className="hidden md:inline-flex"
+              >
+                Join free
+              </ButtonLink>
+            </>
           )}
           <button
             type="button"
@@ -182,13 +189,21 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
                   </p>
                 </>
               ) : (
-                <ButtonLink
-                  href="/auth/login"
-                  variant="outline"
-                  onClick={() => setOpen(false)}
-                >
-                  Sign in
-                </ButtonLink>
+                <>
+                  <ButtonLink
+                    href="/auth/register"
+                    onClick={() => setOpen(false)}
+                  >
+                    Join free
+                  </ButtonLink>
+                  <ButtonLink
+                    href="/auth/login"
+                    variant="outline"
+                    onClick={() => setOpen(false)}
+                  >
+                    Sign in
+                  </ButtonLink>
+                </>
               )}
             </div>
           </div>
