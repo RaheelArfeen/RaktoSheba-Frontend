@@ -8,6 +8,10 @@ import { donorEditSchema, type DonorEditValues } from "@/lib/validations";
 
 type ActionResult = { error: string } | { ok: true };
 
+// Matches the backend upload rules, kept under Vercel's 4.5 MB request limit.
+const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const PHOTO_MAX_BYTES = 4 * 1024 * 1024;
+
 const messageFor = (error: unknown) =>
   error instanceof ApiError ? error.message : "We couldn't reach RaktoSheba. Check your connection and try again.";
 
@@ -89,8 +93,8 @@ export async function uploadDonorPhoto(formData: FormData): Promise<ActionResult
   const token = await donorToken();
   const photo = formData.get("photo");
   if (!(photo instanceof File) || photo.size === 0) return { error: "Choose a photo first." };
-  if (!photo.type.startsWith("image/")) return { error: "The photo must be an image." };
-  if (photo.size > 5 * 1024 * 1024) return { error: "The photo must be smaller than 5 MB." };
+  if (!PHOTO_TYPES.includes(photo.type)) return { error: "The photo must be a JPG, PNG or WEBP image." };
+  if (photo.size > PHOTO_MAX_BYTES) return { error: "The photo must be smaller than 4 MB." };
 
   const body = new FormData();
   body.set("photo", photo);
