@@ -6,7 +6,7 @@ import { publicApi } from "@/lib/requests";
 
 function CalmBanner() {
   return (
-    <div className="bg-maroon px-4 py-2 text-center text-[11px] font-semibold tracking-[.18em] text-[#f7d6ba] uppercase">
+    <div className="bg-maroon px-4 py-2 text-center text-[13px] font-semibold text-[#f7d6ba]">
       <span className="mr-2 inline-block size-1.5 rounded-full bg-mint-strong align-middle" aria-hidden />
       A faster way to find a compatible blood donor
     </div>
@@ -25,7 +25,7 @@ async function LiveBanner() {
     <Link
       href={`/requests?minUrgency=${EMERGENCY_LEVELS.critical.minUrgency}`}
       role="alert"
-      className="group flex items-center justify-center gap-2.5 bg-blood px-4 py-2 text-center text-[11px] font-bold tracking-[.14em] text-cream uppercase transition-colors hover:bg-blood-deep"
+      className="group flex items-center justify-center gap-2.5 bg-blood px-4 py-2 text-center text-[13px] font-semibold text-cream transition-colors hover:bg-blood-deep"
     >
       <span className="relative flex size-2 shrink-0" aria-hidden>
         <span className="absolute inline-flex size-full animate-ping rounded-full bg-cream opacity-75" />
@@ -34,8 +34,8 @@ async function LiveBanner() {
       <span>
         {critical} critical request{critical === 1 ? "" : "s"} need{critical === 1 ? "s" : ""} donors now
       </span>
-      <span className="hidden items-center gap-1 underline-offset-4 group-hover:underline sm:inline-flex">
-        See requests <ArrowRight size={12} />
+      <span className="hidden items-center gap-1 font-bold underline underline-offset-4 sm:inline-flex">
+        See requests <ArrowRight size={14} />
       </span>
     </Link>
   );

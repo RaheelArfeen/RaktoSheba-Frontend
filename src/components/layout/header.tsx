@@ -31,28 +31,40 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
   // Hospitals post their own requests, so the patient-facing emergency button isn't for them.
   const showEmergency = user?.role !== "HOSPITAL";
 
+  // A soft shadow once the page scrolls, so the header stays clearly separate from the content under it.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const isActive = (href: string) =>
     !href.includes("#") &&
     (pathname === href || pathname.startsWith(`${href}/`));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/80 backdrop-blur-xl">
-      <Container className="flex items-center justify-between gap-6 py-4">
+    <header
+      className={`sticky top-0 z-40 border-b bg-paper transition-shadow ${
+        scrolled
+          ? "border-ink/10 shadow-[0_6px_24px_rgba(62,41,36,.08)]"
+          : "border-ink/[.07]"
+      }`}
+    >
+      <Container className="flex h-[72px] items-center justify-between gap-6">
         <Logo />
 
-        <nav
-          aria-label="Main"
-          className="hidden items-center gap-1 rounded-full border border-ink/10 bg-cream/70 p-1 text-sm font-semibold text-ink-muted shadow-[0_6px_18px_rgba(91,44,30,.05)] lg:flex"
-        >
+        <nav aria-label="Main" className="hidden h-full items-center gap-6 lg:flex xl:gap-8">
           {publicNav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`rounded-full px-4 py-2 transition-colors ${
+              className={`relative flex h-full items-center text-[15px] font-semibold whitespace-nowrap transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:rounded-t-full after:transition-colors ${
                 isActive(item.href)
-                  ? "bg-blood text-cream"
-                  : "hover:bg-linen hover:text-blood"
+                  ? "text-blood after:bg-blood"
+                  : "text-ink-soft after:bg-transparent hover:text-blood"
               }`}
             >
               {item.label}
@@ -60,54 +72,55 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           {showEmergency ? (
             // Always visible, even on phones: this is the one button someone in a hurry needs.
-            <ButtonLink href="/emergency" variant="soft" size="sm">
-              <CircleAlert /> <span className="sm:hidden">Help</span>
-              <span className="hidden sm:inline">Emergency help</span>
-            </ButtonLink>
+            <Link
+              href="/emergency"
+              className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-blood/30 whitespace-nowrap bg-blush/60 px-3.5 text-sm font-bold text-blood transition-colors hover:border-blood/50 hover:bg-blush sm:px-4"
+            >
+              <CircleAlert size={17} aria-hidden />
+              {/* Short label on phones and on laptop widths where the full nav needs the room. */}
+              <span className="sm:hidden lg:inline xl:hidden">Help</span>
+              <span className="hidden sm:inline lg:hidden xl:inline">Emergency help</span>
+            </Link>
           ) : null}
           {user ? (
-            <>
-              <ButtonLink
+            <div className="hidden items-center gap-3 sm:flex">
+              <span className="h-6 w-px bg-ink/10" aria-hidden />
+              <Link
                 href={`/dashboard/${user.role.toLowerCase()}`}
-                size="sm"
-                className="hidden sm:inline-flex"
+                className="inline-flex h-10 items-center gap-2 rounded-full bg-blood px-4 whitespace-nowrap text-sm font-bold text-cream transition-colors hover:bg-blood-deep"
               >
-                <LayoutDashboard /> Dashboard
-              </ButtonLink>
-              <div className="hidden sm:block">
-                <UserMenu user={user} />
-              </div>
-            </>
+                <LayoutDashboard size={16} aria-hidden /> Dashboard
+              </Link>
+              <UserMenu user={user} />
+            </div>
           ) : (
-            <>
-              <ButtonLink
+            <div className="hidden items-center gap-3 sm:flex">
+              <span className="h-6 w-px bg-ink/10" aria-hidden />
+              <Link
                 href="/auth/login"
-                variant="ghost"
-                size="sm"
-                className="hidden sm:inline-flex"
+                className="inline-flex h-10 items-center px-2 text-sm font-bold text-ink transition-colors hover:text-blood"
               >
                 Sign in
-              </ButtonLink>
-              <ButtonLink
+              </Link>
+              <Link
                 href="/auth/register"
-                size="sm"
-                className="hidden md:inline-flex"
+                className="hidden h-10 items-center rounded-full bg-blood px-5 text-sm font-bold text-cream transition-colors hover:bg-blood-deep md:inline-flex"
               >
                 Join free
-              </ButtonLink>
-            </>
+              </Link>
+            </div>
           )}
           <button
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
             aria-expanded={open}
-            className="grid size-10 place-items-center rounded-full text-ink-muted transition-colors hover:bg-linen hover:text-blood lg:hidden"
+            className="grid size-10 place-items-center rounded-full border border-ink/12 text-ink transition-colors hover:border-blood/30 hover:text-blood lg:hidden"
           >
-            <Menu size={20} />
+            <Menu size={19} />
           </button>
         </div>
       </Container>
