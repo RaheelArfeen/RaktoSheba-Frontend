@@ -30,6 +30,7 @@ const first = (value: string | string[] | undefined) => (Array.isArray(value) ? 
 /** Turns URL search params into a safe board query; unknown or invalid values are dropped. */
 export function parseBoardParams(params: SearchParams): Required<Pick<RequestBoardQuery, "page" | "limit">> & RequestBoardQuery {
   const bloodGroup = first(params.bloodGroup);
+  const canHelp = first(params.canHelp);
   const minUrgency = Number(first(params.minUrgency));
   const status = first(params.status);
   const sortBy = first(params.sortBy);
@@ -38,6 +39,7 @@ export function parseBoardParams(params: SearchParams): Required<Pick<RequestBoa
 
   return {
     bloodGroup: isBloodGroup(bloodGroup) ? bloodGroup : undefined,
+    canHelp: isBloodGroup(canHelp) ? canHelp : undefined,
     minUrgency: Number.isInteger(minUrgency) && minUrgency >= 1 && minUrgency <= 5 ? minUrgency : undefined,
     status: BOARD_STATUSES.includes(status as (typeof BOARD_STATUSES)[number])
       ? (status as RequestBoardQuery["status"])

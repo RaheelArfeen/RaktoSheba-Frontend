@@ -8,6 +8,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Skeleton } from "@/components/ui/skeleton";
+import { bloodGroupLabel } from "@/lib/blood";
 import { boardHref, parseBoardParams, publicApi } from "@/lib/requests";
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/request
     <>
       <section className="relative overflow-hidden border-b border-ink/10">
         <div className="absolute -top-24 -right-24 -z-10 size-[380px] rounded-full bg-mint/40 blur-3xl" />
-        <Container className="py-14 sm:py-16">
+        <Container className="py-10 sm:py-16">
           <Eyebrow>Live request board</Eyebrow>
           <h1 className="mt-4 max-w-[820px] font-display text-3xl leading-[1.08] tracking-[-.02em] sm:text-4xl lg:text-5xl">Someone nearby needs your help.</h1>
           <p className="mt-5 max-w-[620px] text-[17px] leading-8 text-ink-muted">
@@ -35,7 +36,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/request
         </Container>
       </section>
 
-      <Container className="space-y-6 py-10 sm:py-14">
+      <Container className="space-y-6 py-6 sm:py-14">
         {/* Filters reads useSearchParams, which needs a Suspense boundary. */}
         <Suspense fallback={<Skeleton className="h-36 rounded-[26px]" />}>
           <Filters />
@@ -43,6 +44,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/request
 
         <p aria-live="polite" className="text-sm font-semibold text-ink-muted">
           {meta.total === 0 ? "No requests" : `${meta.total} request${meta.total === 1 ? "" : "s"}`}
+          {query.canHelp && ` your ${bloodGroupLabel[query.canHelp]} blood can help`}
           {totalPages > 1 && ` · page ${query.page} of ${totalPages}`}
         </p>
 

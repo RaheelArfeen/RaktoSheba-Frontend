@@ -87,10 +87,10 @@ export function MatchLensSection() {
             </div>
           </div>
           <Link
-            href={`/requests?bloodGroup=${selected}`}
+            href={`/requests?canHelp=${selected}`}
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-cream px-5 py-3 text-sm font-extrabold text-blood transition-all hover:-translate-y-0.5"
           >
-            See {bloodGroupLabel[selected]} requests <ArrowRight size={16} />
+            See requests {bloodGroupLabel[selected]} can help <ArrowRight size={16} />
           </Link>
         </div>
       </div>

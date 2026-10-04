@@ -165,6 +165,8 @@ export type PlatformStats = {
 
 export type RequestBoardQuery = {
   bloodGroup?: BloodGroup;
+  /** A donor's own group: shows every request that group can safely give to. */
+  canHelp?: BloodGroup;
   minUrgency?: number;
   search?: string;
   status?: "open" | "matched" | "fulfilled" | "all";
