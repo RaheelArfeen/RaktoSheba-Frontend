@@ -107,6 +107,27 @@
   input[type="range"] {
     cursor: pointer;
   }
+  /* A clear ring for keyboard users on every link and button; mouse clicks don't show it. */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  [role="tab"]:focus-visible {
+    outline: 2px solid var(--color-blood);
+    outline-offset: 2px;
+  }
+  /* People who turn off motion in their system settings get a calm page. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
   ::selection {
     background: var(--color-blood);
     color: var(--color-cream);
