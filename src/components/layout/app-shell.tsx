@@ -13,7 +13,7 @@ export function AppShell({ header, footer, children }: { header: ReactNode; foot
   }
 
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden">
+    <div className="flex min-h-screen flex-col overflow-x-clip">
       {/* Lets keyboard and screen-reader users jump past the header straight to the page. */}
       <a
         href="#main"
