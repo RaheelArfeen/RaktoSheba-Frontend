@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { register as registerAccount } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Spinner } from "@/components/ui/spinner";
 import { GoogleButton } from "./google-button";
 import { BLOOD_GROUPS, bloodGroupLabel } from "@/lib/blood";
@@ -124,12 +125,12 @@ export function RegisterForm({ initialRole }: { initialRole?: "DONOR" | "HOSPITA
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" autoComplete="new-password" placeholder="At least 6 characters" aria-invalid={!!errors.password} {...register("password")} />
+              <PasswordInput id="password" autoComplete="new-password" placeholder="At least 6 characters" aria-invalid={!!errors.password} {...register("password")} />
               <FieldError message={errors.password?.message} />
             </div>
             <div>
               <Label htmlFor="confirmPassword">Confirm password</Label>
-              <Input id="confirmPassword" type="password" autoComplete="new-password" aria-invalid={!!errors.confirmPassword} {...register("confirmPassword")} />
+              <PasswordInput id="confirmPassword" autoComplete="new-password" aria-invalid={!!errors.confirmPassword} {...register("confirmPassword")} />
               <FieldError message={errors.confirmPassword?.message} />
             </div>
           </div>
