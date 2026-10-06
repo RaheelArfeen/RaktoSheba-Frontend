@@ -7,6 +7,8 @@ import { hospitalRequestApi } from "@/lib/hospitals";
 import { getSession } from "@/lib/session";
 import { bloodRequestWizardSchema, type BloodRequestWizardValues } from "@/lib/validations";
 
+export type ActionResult = { error: string } | { ok: true };
+
 const messageFor = (error: unknown) =>
   error instanceof ApiError ? error.message : "We couldn't reach RaktoSheba. Check your connection and try again.";
 
@@ -41,6 +43,19 @@ export async function createBloodRequest(
     });
     revalidatePath("/dashboard/hospital/requests", "layout");
     return { ok: true, id: result.id };
+  } catch (error) {
+    return { error: messageFor(error) };
+  }
+}
+
+/** Mark a matched blood request as fulfilled. */
+export async function fulfillRequest(requestId: string): Promise<ActionResult> {
+  const token = await hospitalToken();
+  try {
+    await hospitalRequestApi.fulfillRequest(token, requestId);
+    revalidatePath("/dashboard/hospital/requests", "layout");
+    revalidatePath("/dashboard/hospital/requests/" + requestId);
+    return { ok: true };
   } catch (error) {
     return { error: messageFor(error) };
   }
