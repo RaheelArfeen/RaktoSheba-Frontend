@@ -194,7 +194,7 @@ export type RequestBoardQuery = {
   canHelp?: BloodGroup;
   minUrgency?: number;
   search?: string;
-  status?: "open" | "matched" | "fulfilled" | "all";
+  status?: "pending" | "open" | "matched" | "fulfilled" | "all";
   sortBy?: "urgency" | "createdAt";
   sortOrder?: "asc" | "desc";
   page?: number;

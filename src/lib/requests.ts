@@ -20,7 +20,7 @@ export const publicApi = {
 
 
 export const BOARD_PAGE_SIZE = 10;
-export const BOARD_STATUSES = ["open", "matched", "fulfilled", "all"] as const;
+export const BOARD_STATUSES = ["pending", "open", "matched", "fulfilled", "all"] as const;
 export const BOARD_SORTS = ["urgency", "createdAt"] as const;
 
 type SearchParams = Record<string, string | string[] | undefined>;
