@@ -159,6 +159,28 @@ export const hospitalProfileSchema = z.object({
 export type DonorProfileValues = z.infer<typeof donorProfileSchema>;
 export type HospitalProfileValues = z.infer<typeof hospitalProfileSchema>;
 
+// ---- Blood request wizard (hospital) --------------------------------------
+
+export const bloodRequestWizardSchema = z.object({
+  bloodGroup: z.enum(BLOOD_GROUPS as [BloodGroup, ...BloodGroup[]], { error: "Choose the blood group needed." }),
+  urgency: z.coerce.number().int().min(1).max(5, "Choose urgency."),
+  units: z.coerce.number().int().min(1, "At least 1 unit.").max(10, "Max 10 units."),
+  location: z.string().trim().min(3, "Add a hospital, area or landmark.").max(120, "Keep it under 120 characters."),
+  lat: z.number().min(-90).max(90).nullable().optional(),
+  lng: z.number().min(-180).max(180).nullable().optional(),
+});
+
+export type BloodRequestWizardInput = z.input<typeof bloodRequestWizardSchema>;
+export type BloodRequestWizardValues = z.output<typeof bloodRequestWizardSchema>;
+
+/** Which fields each wizard step validates before moving on. Step 4 is review-only. */
+export const requestWizardSteps: (keyof BloodRequestWizardValues)[][] = [
+  ["bloodGroup"],
+  ["urgency", "units"],
+  ["location", "lat", "lng"],
+  [],
+];
+
 // ---- Donor profile editing -------------------------------------------------
 
 const todayInDhaka = () => new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
