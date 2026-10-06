@@ -181,6 +181,15 @@ export const requestWizardSteps: (keyof BloodRequestWizardValues)[][] = [
   [],
 ];
 
+// ---- Hospital profile editing ---------------------------------------------
+
+export const hospitalEditSchema = z.object({
+  hospitalName: z.string().trim().min(2, "Enter the hospital name.").max(120, "Keep it under 120 characters."),
+  hospitalAddress: z.string().trim().min(5, "Enter the full address.").max(200, "Keep it under 200 characters."),
+});
+
+export type HospitalEditValues = z.infer<typeof hospitalEditSchema>;
+
 // ---- Donor profile editing -------------------------------------------------
 
 const todayInDhaka = () => new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });

@@ -1,9 +1,29 @@
 import type { BloodRequest, BloodRequestDetail, CreateBloodRequestInput, Hospital, RequestBoardQuery } from "@/types";
-import { api, apiPaginated } from "./api";
+import type { HospitalEditValues } from "@/lib/validations";
+import { api, apiPaginated, API_URL } from "./api";
 
 export const hospitalApi = {
   /** The signed-in hospital's own profile, including verification status. */
   me: (token: string) => api<Hospital>("/hospitals/me", { token, cache: "no-store" }),
+
+  /** Update the hospital's name and address. */
+  updateProfile: (token: string, body: HospitalEditValues) =>
+    api<Hospital>("/hospitals/me", { method: "PATCH", token, cache: "no-store", body }),
+
+  /** Upload a licence document (multipart). Bypasses the JSON helper. */
+  uploadLicence: async (token: string, formData: FormData): Promise<{ success: boolean; message?: string }> => {
+    const response = await fetch(`${API_URL}/hospitals/me/licence`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${token}` },
+      body: formData,
+      cache: "no-store",
+    });
+    const result = (await response.json().catch(() => null)) as { success?: boolean; message?: string } | null;
+    if (!response.ok || !result?.success) {
+      throw new Error(result?.message ?? "The upload failed. Please try again.");
+    }
+    return result as { success: boolean; message?: string };
+  },
 };
 
 export const hospitalRequestApi = {
