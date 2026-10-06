@@ -17,6 +17,13 @@ export default function AdminLoading() {
           ))}
         </div>
       </div>
+      <div className="rounded-[24px] border border-ink/10 bg-cream p-6">
+        <Skeleton className="h-5 w-48" />
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          <Skeleton className="h-[220px] rounded-2xl" />
+          <Skeleton className="h-[200px] rounded-2xl" />
+        </div>
+      </div>
     </div>
   );
 }

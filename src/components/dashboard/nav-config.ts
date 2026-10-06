@@ -1,4 +1,4 @@
-import { Building2, Droplets, Globe, HandHeart, History, LayoutDashboard, Plus, UserRound, type LucideIcon } from "lucide-react";
+import { Building2, ClipboardCheck, CreditCard, Droplets, Globe, HandHeart, History, LayoutDashboard, Plus, UserRound, Users, type LucideIcon } from "lucide-react";
 import type { Role } from "@/types";
 
 export type NavItem = { href: string; label: string; icon: LucideIcon };
@@ -17,7 +17,13 @@ export const dashboardNav: Record<Role, NavItem[]> = {
     { href: "/dashboard/hospital/requests/new", label: "New request", icon: Plus },
     { href: "/dashboard/hospital/profile", label: "Hospital profile", icon: Building2 },
   ],
-  ADMIN: [{ href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard }],
+  ADMIN: [
+    { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard },
+    { href: "/dashboard/admin/queue", label: "Verification queue", icon: ClipboardCheck },
+    { href: "/dashboard/admin/hospitals", label: "Hospitals", icon: Building2 },
+    { href: "/dashboard/admin/users", label: "Users", icon: Users },
+    { href: "/dashboard/admin/payments", label: "Payments & audit", icon: CreditCard },
+  ],
 };
 
 export const siteLink: NavItem = { href: "/", label: "Back to the site", icon: Globe };

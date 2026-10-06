@@ -5,12 +5,16 @@ import { adminApi } from "@/lib/admin";
 import { requestStatusLabel } from "@/lib/emergency";
 import { getSession } from "@/lib/session";
 import type { RequestStatus } from "@/types";
+import { AdminCharts } from "./components/admin-charts";
 
 export const metadata: Metadata = { title: "Admin dashboard" };
 
 export default async function AdminDashboard() {
   const session = (await getSession())!;
-  const a = await adminApi.analytics(session.accessToken);
+  const [a, ts] = await Promise.all([
+    adminApi.analytics(session.accessToken),
+    adminApi.timeSeries(session.accessToken),
+  ]);
 
   const cards = [
     { icon: Users, label: "Donors", value: a.donors.total, note: `${a.donors.available} available now`, tone: "bg-mint text-forest" },
@@ -53,6 +57,8 @@ export default async function AdminDashboard() {
           ))}
         </div>
       </div>
+
+      <AdminCharts timeSeries={ts} />
     </div>
   );
 }
