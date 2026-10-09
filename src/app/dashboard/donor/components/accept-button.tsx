@@ -1,12 +1,12 @@
 "use client";
 
-import { useId, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useId, useState } from "react";
 import { HandHeart } from "lucide-react";
 import { toast } from "sonner";
-import { acceptRequest } from "@/app/actions/donor";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { errorMessage } from "@/lib/client-api";
+import { useAcceptRequest } from "@/lib/queries/use-donor";
 
 /** "I can help" with a confirm step, so nobody commits to a hospital by accident. */
 export function AcceptButton({
@@ -21,22 +21,20 @@ export function AcceptButton({
   disabledReason?: string | null;
   className?: string;
 }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const reasonId = useId();
-  const [pending, startTransition] = useTransition();
+  const accept = useAcceptRequest();
 
   const confirm = () =>
-    startTransition(async () => {
-      const result = await acceptRequest(requestId);
-      if ("error" in result) {
-        toast.error(result.error);
+    accept.mutate(requestId, {
+      onSuccess: () => {
+        toast.success(`Thank you! ${hospital} can now see you're coming.`);
         setOpen(false);
-        return;
-      }
-      toast.success(`Thank you! ${hospital} can now see you're coming.`);
-      setOpen(false);
-      router.replace("/dashboard/donor");
+      },
+      onError: (err) => {
+        toast.error(errorMessage(err));
+        setOpen(false);
+      },
     });
 
   return (
@@ -56,7 +54,7 @@ export function AcceptButton({
         </p>
       )}
       {open && (
-        <ConfirmDialog title="Confirm you can donate" confirmLabel="Yes, I'll go" pending={pending} onConfirm={confirm} onClose={() => setOpen(false)}>
+        <ConfirmDialog title="Confirm you can donate" confirmLabel="Yes, I'll go" pending={accept.isPending} onConfirm={confirm} onClose={() => setOpen(false)}>
           <p>
             You&apos;re telling <strong className="text-ink">{hospital}</strong> you&apos;ll come in to donate. Please only confirm if you can
             get there soon.

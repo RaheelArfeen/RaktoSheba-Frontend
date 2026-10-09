@@ -1,23 +1,25 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, LocateFixed, MapPin } from "lucide-react";
 import { toast } from "sonner";
-import { updateDonorProfile } from "@/app/actions/donor";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { BLOOD_GROUPS, bloodGroupLabel } from "@/lib/blood";
 import { cn } from "@/lib/cn";
+import { errorMessage } from "@/lib/client-api";
+import { useUpdateDonorProfile } from "@/lib/queries/use-donor";
 import { donorEditSchema, type DonorEditValues } from "@/lib/validations";
 import type { DonorProfile } from "@/types";
 
 const toDateInput = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }) : "");
 
 export function ProfileForm({ profile }: { profile: DonorProfile }) {
-  const [pending, startTransition] = useTransition();
+  const save = useUpdateDonorProfile();
+  const pending = save.isPending;
   const [locating, setLocating] = useState(false);
   const {
     register,
@@ -58,11 +60,12 @@ export function ProfileForm({ profile }: { profile: DonorProfile }) {
   };
 
   const onSubmit = (values: DonorEditValues) =>
-    startTransition(async () => {
-      const result = await updateDonorProfile(values);
-      if ("error" in result) return void toast.error(result.error);
-      toast.success("Profile saved.");
-      reset(values);
+    save.mutate(values, {
+      onSuccess: () => {
+        toast.success("Profile saved.");
+        reset(values);
+      },
+      onError: (err) => toast.error(errorMessage(err)),
     });
 
   return (
@@ -119,7 +122,7 @@ export function ProfileForm({ profile }: { profile: DonorProfile }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3 border-t border-ink/10 pt-6">
+      <div className="flex flex-wrap items-center gap-3 border-t border-ink/10 pt-6">
         <Button type="submit" disabled={pending || !isDirty}>
           {pending ? <Spinner className="text-cream" /> : <><Check /> Save changes</>}
         </Button>

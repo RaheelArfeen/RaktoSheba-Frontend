@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Camera, UserRound } from "lucide-react";
 import { toast } from "sonner";
-import { uploadDonorPhoto } from "@/app/actions/donor";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { errorMessage } from "@/lib/client-api";
+import { useUploadDonorPhoto } from "@/lib/queries/use-donor";
 
 const MAX_BYTES = 4 * 1024 * 1024;
 const TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -15,7 +16,8 @@ export function PhotoUpload({ photoUrl }: { photoUrl: string | null }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
+  const uploadPhoto = useUploadDonorPhoto();
+  const pending = uploadPhoto.isPending;
 
   // Free the preview's memory when it changes or the component goes away.
   useEffect(() => () => void (preview && URL.revokeObjectURL(preview)), [preview]);
@@ -34,16 +36,16 @@ export function PhotoUpload({ photoUrl }: { photoUrl: string | null }) {
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const upload = () =>
-    startTransition(async () => {
-      if (!file) return;
-      const data = new FormData();
-      data.set("photo", file);
-      const result = await uploadDonorPhoto(data);
-      if ("error" in result) return void toast.error(result.error);
-      toast.success("Photo updated.");
-      cancel();
+  const upload = () => {
+    if (!file) return;
+    uploadPhoto.mutate(file, {
+      onSuccess: () => {
+        toast.success("Photo updated.");
+        cancel();
+      },
+      onError: (err) => toast.error(errorMessage(err)),
     });
+  };
 
   const shown = preview ?? photoUrl;
 
