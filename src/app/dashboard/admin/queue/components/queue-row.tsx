@@ -1,113 +1,106 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { verifyRequest, cancelRequest } from "@/app/actions/admin";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import { EmergencyBadge, StatusBadge } from "@/components/ui/badge";
+import { EmergencyBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { bloodGroupLabel } from "@/lib/blood";
+import { errorMessage } from "@/lib/client-api";
+import { cn } from "@/lib/cn";
+import { emergencyLevel } from "@/lib/emergency";
 import { timeAgo, unitsLabel } from "@/lib/format";
-import type { BloodRequest } from "@/types";
+import { useCancelRequest, useVerifyRequest } from "@/lib/queries/use-admin";
+import type { BloodRequest, EmergencyLevel } from "@/types";
 
-type Props = {
-  request: BloodRequest;
+const levelAccent: Record<EmergencyLevel, string> = {
+  critical: "bg-blood",
+  severe: "bg-blush-deep",
+  urgent: "bg-sand-deep",
+  standard: "bg-linen",
 };
 
-export function QueueRow({ request }: Props) {
+export function QueueRow({ request }: { request: BloodRequest }) {
   const [confirmAction, setConfirmAction] = useState<"verify" | "cancel" | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const verify = useVerifyRequest();
+  const cancel = useCancelRequest();
+  const pending = verify.isPending || cancel.isPending;
 
   const hospital = request.requester?.hospital;
 
   return (
-    <div className="flex flex-col gap-4 rounded-[24px] border border-ink/10 bg-cream p-5 sm:flex-row sm:items-center sm:justify-between">
-      {/* Left: blood group tile + details */}
+    <div className="relative flex flex-col gap-4 overflow-hidden rounded-[24px] border border-ink/10 bg-cream p-5 pl-6 transition-colors hover:border-ink/20 sm:flex-row sm:items-center sm:justify-between">
+      <span aria-hidden className={cn("absolute inset-y-0 left-0 w-1.5", levelAccent[emergencyLevel(request.urgency)])} />
+
       <div className="flex items-center gap-4">
-        <div className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-blush text-blood text-lg font-extrabold">
+        <div className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-blush text-lg font-extrabold text-blood">
           {bloodGroupLabel[request.bloodGroup]}
         </div>
-        <div className="space-y-1">
-          <p className="font-semibold text-ink leading-none">
-            {hospital?.name ?? "Unknown hospital"}
-          </p>
-          {hospital?.address && (
-            <p className="text-sm text-ink-muted">{hospital.address}</p>
-          )}
+        <div className="min-w-0 space-y-1">
+          <p className="truncate font-semibold leading-none text-ink">{hospital?.name ?? "Unknown hospital"}</p>
+          {hospital?.address && <p className="truncate text-sm text-ink-muted">{hospital.address}</p>}
           <div className="flex flex-wrap items-center gap-2 pt-0.5">
-            <span className="text-xs text-ink-muted">{timeAgo(request.createdAt)}</span>
-            <span className="text-xs text-ink-muted">·</span>
-            <span className="text-xs text-ink-muted">{unitsLabel(request.unitsNeeded)}</span>
+            <span className="text-xs font-semibold text-ink-faint">{timeAgo(request.createdAt)}</span>
+            <span className="text-xs text-ink-faint">·</span>
+            <span className="text-xs font-semibold text-ink-faint">{unitsLabel(request.unitsNeeded)} needed</span>
             <EmergencyBadge urgency={request.urgency} />
-            <StatusBadge status={request.status} />
           </div>
         </div>
       </div>
 
-      {/* Right: action buttons */}
-      <div className="flex shrink-0 gap-2">
-        <Button
-          variant="forest"
-          size="sm"
-          onClick={() => setConfirmAction("verify")}
-          disabled={isPending}
-        >
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
+        <Button variant="forest" size="sm" onClick={() => setConfirmAction("verify")} disabled={pending}>
           Verify
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setConfirmAction("cancel")}
-          disabled={isPending}
-        >
+        <Button variant="outline" size="sm" onClick={() => setConfirmAction("cancel")} disabled={pending}>
           Cancel
         </Button>
       </div>
 
-      {/* Verify confirm dialog */}
       {confirmAction === "verify" && (
         <ConfirmDialog
           title="Verify this request?"
           confirmLabel="Verify"
-          onConfirm={() => {
-            startTransition(async () => {
-              const r = await verifyRequest(request.id);
-              if ("error" in r) {
-                toast.error(r.error);
-              } else {
+          pending={verify.isPending}
+          onConfirm={() =>
+            verify.mutate(request.id, {
+              onSuccess: () => {
                 toast.success("Request verified — donors alerted.");
-              }
-              setConfirmAction(null);
-            });
-          }}
+                setConfirmAction(null);
+              },
+              onError: (err) => {
+                toast.error(errorMessage(err));
+                setConfirmAction(null);
+              },
+            })
+          }
           onClose={() => setConfirmAction(null)}
-          pending={isPending}
         >
-          This will move the request to Verified and notify compatible donors.
+          This moves the request to Open and alerts every compatible donor nearby.
         </ConfirmDialog>
       )}
 
-      {/* Cancel confirm dialog */}
       {confirmAction === "cancel" && (
         <ConfirmDialog
           title="Cancel this request?"
           confirmLabel="Cancel request"
           tone="danger"
-          onConfirm={() => {
-            startTransition(async () => {
-              const r = await cancelRequest(request.id);
-              if ("error" in r) {
-                toast.error(r.error);
-              } else {
+          pending={cancel.isPending}
+          onConfirm={() =>
+            cancel.mutate(request.id, {
+              onSuccess: () => {
                 toast.success("Request cancelled.");
-              }
-              setConfirmAction(null);
-            });
-          }}
+                setConfirmAction(null);
+              },
+              onError: (err) => {
+                toast.error(errorMessage(err));
+                setConfirmAction(null);
+              },
+            })
+          }
           onClose={() => setConfirmAction(null)}
-          pending={isPending}
         >
-          This permanently cancels the request. The hospital can post a new one.
+          This permanently cancels the request. The hospital can post a new one at any time.
         </ConfirmDialog>
       )}
     </div>
