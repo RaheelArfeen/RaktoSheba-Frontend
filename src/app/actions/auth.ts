@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
+import { toHospitalPayload } from "@/lib/hospitals";
 import { ACCESS_COOKIE, REFRESH_COOKIE, dashboardPath, getSession, safeNext, setSessionCookies } from "@/lib/session";
 import {
   donorProfileSchema,
@@ -14,7 +15,7 @@ import {
   type LoginValues,
   type RegisterValues,
 } from "@/lib/validations";
-import type { AuthSession } from "@/types";
+import type { AuthSession, Hospital } from "@/types";
 
 type ActionResult = { error: string } | void;
 
@@ -34,7 +35,16 @@ export async function login(values: LoginValues, next?: string): Promise<ActionR
     return { error: messageFor(error) };
   }
   await startSession(session);
-  redirect(safeNext(next, dashboardPath(session.user.role)));
+  const target = safeNext(next, dashboardPath(session.user.role));
+
+  if (session.user.role === "HOSPITAL") {
+    // Hospitals with an unfinished profile complete the extended details form first.
+    const profile = await api<Pick<Hospital, "phone" | "district">>("/hospitals/me", { token: session.accessToken, cache: "no-store" }).catch(() => null);
+    if (!profile || !profile.phone?.trim() || !profile.district?.trim()) {
+      redirect(`/onboarding?next=${encodeURIComponent(target)}`);
+    }
+  }
+  redirect(target);
 }
 
 export async function register(values: RegisterValues): Promise<ActionResult> {
@@ -54,7 +64,8 @@ export async function register(values: RegisterValues): Promise<ActionResult> {
   }
   await startSession(session);
 
-  // Create the role's profile straight away so the dashboard is ready on first visit.
+  // Hospitals finish their profile in the extended onboarding form; donors are done.
+  const onboardingNext = `/onboarding?next=${encodeURIComponent(dashboardPath(session.user.role))}`;
   try {
     if (data.role === "DONOR") {
       await api("/donors", { method: "POST", token: session.accessToken, body: { bloodGroup: data.bloodGroup }, cache: "no-store" });
@@ -67,13 +78,15 @@ export async function register(values: RegisterValues): Promise<ActionResult> {
       });
     }
   } catch {
-    // The account exists and the user is signed in; they can finish their profile from the dashboard.
+    // The account exists and the user is signed in; donors can finish from the dashboard.
+    if (data.role === "HOSPITAL") redirect(onboardingNext);
     redirect(`${dashboardPath(session.user.role)}?profile=incomplete`);
   }
+  if (data.role === "HOSPITAL") redirect(onboardingNext);
   redirect(`${dashboardPath(session.user.role)}?welcome=1`);
 }
 
-/** Finish a donor or hospital profile (used after signing up with Google). */
+/** Finish a donor or hospital profile (used after signing up with Google or registering as a hospital). */
 export async function completeProfile(values: DonorProfileValues | HospitalProfileValues, next?: string): Promise<ActionResult> {
   const session = await getSession();
   if (!session) redirect("/auth/login");
@@ -87,15 +100,17 @@ export async function completeProfile(values: DonorProfileValues | HospitalProfi
     } else if (role === "HOSPITAL") {
       const parsed = hospitalProfileSchema.safeParse(values);
       if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the hospital details." };
-      await api("/hospitals", {
-        method: "POST",
-        token: session.accessToken,
-        body: { name: parsed.data.hospitalName, address: parsed.data.hospitalAddress },
-        cache: "no-store",
-      });
+      const body = toHospitalPayload(parsed.data);
+      try {
+        await api("/hospitals", { method: "POST", token: session.accessToken, body, cache: "no-store" });
+      } catch (error) {
+        // The profile was already created during sign-up? Fill in the extended details instead.
+        if (!(error instanceof ApiError && error.status === 409)) return { error: messageFor(error) };
+        await api("/hospitals/me", { method: "PATCH", token: session.accessToken, body, cache: "no-store" });
+      }
     }
   } catch (error) {
-    // A profile that already exists is fine — just carry on to the dashboard.
+    // A donor profile that already exists is fine — just carry on to the dashboard.
     if (!(error instanceof ApiError && error.status === 409)) return { error: messageFor(error) };
   }
   redirect(safeNext(next, `${dashboardPath(role)}?welcome=1`));

@@ -151,16 +151,77 @@ export const donorProfileSchema = z.object({
   bloodGroup: z.enum(BLOOD_GROUPS as [string, ...string[]], { error: "Choose your blood group." }),
 });
 
+export type DonorProfileValues = z.infer<typeof donorProfileSchema>;
+
+export const HOSPITAL_TYPES = [
+  { value: "GOVERNMENT", label: "Government" },
+  { value: "PRIVATE", label: "Private" },
+  { value: "CLINIC", label: "Clinic" },
+] as const;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Optional text inputs submit "" when left blank; the payload mapper drops those. */
+const optionalText = (max: number, message: string) => z.string().trim().max(max, message).optional();
+
+/** Shared hospital detail fields — required basics plus optional extras. */
+const hospitalDetailsFields = {
+  hospitalType: z.enum(["GOVERNMENT", "PRIVATE", "CLINIC"], { error: "Choose the hospital type." }).or(z.literal("")),
+  email: z
+    .string()
+    .trim()
+    .max(160, "Keep it under 160 characters.")
+    .refine((v) => !v || EMAIL_RE.test(v), "Enter a valid email address.")
+    .optional(),
+  phone: z.string().trim().min(6, "Enter a contact number (at least 6 characters).").max(20, "Keep it under 20 characters."),
+  emergencyPhone: z
+    .string()
+    .trim()
+    .max(20, "Keep it under 20 characters.")
+    .refine((v) => !v || v.length >= 6, "Enter a full number (at least 6 characters).")
+    .optional(),
+  district: z.string().trim().min(2, "Enter the district.").max(60, "Keep it under 60 characters."),
+  upazila: optionalText(60, "Keep it under 60 characters."),
+  website: z
+    .string()
+    .trim()
+    .max(200, "Keep it under 200 characters.")
+    .refine((v) => !v || /^https?:\/\/\S+\.\S+/.test(v), "Enter a valid URL starting with http:// or https://.")
+    .optional(),
+  openHours: optionalText(60, "Keep it under 60 characters."),
+  hasEmergencyService: z.boolean(),
+  licenseNumber: optionalText(60, "Keep it under 60 characters."),
+  description: optionalText(1000, "Keep it under 1,000 characters."),
+};
+
 export const hospitalProfileSchema = z.object({
   hospitalName: z.string().trim().min(2, "Enter the hospital's name.").max(120, "Keep it under 120 characters."),
   hospitalAddress: z.string().trim().min(5, "Enter the full address.").max(200, "Keep it under 200 characters."),
+  ...hospitalDetailsFields,
 });
 
-export type DonorProfileValues = z.infer<typeof donorProfileSchema>;
 export type HospitalProfileValues = z.infer<typeof hospitalProfileSchema>;
+
+// ---- Blood request form (hospital) ----------------------------------------
+
+/** One full-page form: blood group, urgency, units and an optional pin. */
+export const bloodRequestSchema = z.object({
+  bloodGroup: z.enum(BLOOD_GROUPS as [BloodGroup, ...BloodGroup[]], { error: "Choose the blood group needed." }),
+  urgency: z.coerce.number().int().min(1).max(5, "Choose urgency."),
+  units: z.coerce.number().int().min(1, "At least 1 unit.").max(10, "Max 10 units."),
+  lat: z.number().min(-90).max(90).nullable().optional(),
+  lng: z.number().min(-180).max(180).nullable().optional(),
+});
+
+export type BloodRequestInput = z.input<typeof bloodRequestSchema>;
+export type BloodRequestValues = z.output<typeof bloodRequestSchema>;
 
 // ---- Blood request wizard (hospital) --------------------------------------
 
+/**
+ * Multi-step wizard shape. `location` is UI-only (helps the hospital describe
+ * where blood is needed); the API only takes lat/lng, so the mutation drops it.
+ */
 export const bloodRequestWizardSchema = z.object({
   bloodGroup: z.enum(BLOOD_GROUPS as [BloodGroup, ...BloodGroup[]], { error: "Choose the blood group needed." }),
   urgency: z.coerce.number().int().min(1).max(5, "Choose urgency."),
@@ -183,12 +244,9 @@ export const requestWizardSteps: (keyof BloodRequestWizardValues)[][] = [
 
 // ---- Hospital profile editing ---------------------------------------------
 
-export const hospitalEditSchema = z.object({
-  hospitalName: z.string().trim().min(2, "Enter the hospital name.").max(120, "Keep it under 120 characters."),
-  hospitalAddress: z.string().trim().min(5, "Enter the full address.").max(200, "Keep it under 200 characters."),
-});
+export const hospitalEditSchema = hospitalProfileSchema;
 
-export type HospitalEditValues = z.infer<typeof hospitalEditSchema>;
+export type HospitalEditValues = HospitalProfileValues;
 
 // ---- Donor profile editing -------------------------------------------------
 

@@ -16,6 +16,8 @@ export type RequestStatus = "PENDING" | "VERIFIED" | "MATCHED" | "FULFILLED" | "
 export type DonationStatus = "SCHEDULED" | "COMPLETED" | "CANCELLED";
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED";
 export type PaymentPurpose = "PLATFORM_DONATION" | "EMERGENCY_FUND";
+export type HospitalType = "GOVERNMENT" | "PRIVATE" | "CLINIC";
+export type VerificationStatus = "PENDING" | "VERIFIED" | "REJECTED";
 
 // ---- Response envelope ----------------------------------------------------
 
@@ -67,7 +69,19 @@ export type Hospital = {
   userId: string;
   name: string;
   address: string;
-  verified: boolean;
+  type: HospitalType | null;
+  email: string | null;
+  district: string | null;
+  upazila: string | null;
+  phone: string | null;
+  emergencyPhone: string | null;
+  website: string | null;
+  logoUrl: string | null;
+  openHours: string | null;
+  hasEmergencyService: boolean;
+  description: string | null;
+  licenseNumber: string | null;
+  verificationStatus: VerificationStatus;
   licenseDocUrl: string | null;
   deletedAt: string | null;
   user?: { id: string; email: string };
@@ -129,7 +143,12 @@ export type MyDonation = Donation & {
   };
 };
 
-export type RequestHospital = { id: string; name: string; address: string; verified: boolean };
+export type RequestHospital = {
+  id: string;
+  name: string;
+  address: string;
+  verificationStatus: VerificationStatus;
+};
 
 export type BloodRequest = {
   id: string;
@@ -194,7 +213,7 @@ export type RequestBoardQuery = {
   canHelp?: BloodGroup;
   minUrgency?: number;
   search?: string;
-  status?: "pending" | "open" | "matched" | "fulfilled" | "all";
+  status?: "pending" | "open" | "matched" | "fulfilled" | "cancelled" | "all";
   sortBy?: "urgency" | "createdAt";
   sortOrder?: "asc" | "desc";
   page?: number;
@@ -228,6 +247,14 @@ export type Payment = {
 };
 
 export type CheckoutSession = { payment: Payment; checkoutUrl: string | null };
+
+/** Aggregates from GET /payments/stats (admin only). */
+export type PaymentStats = {
+  totalCollected: number;
+  totalPayments: number;
+  byStatus: Record<PaymentStatus, { count: number; amount: number }>;
+  byPurpose: Record<PaymentPurpose, { count: number; amount: number }>;
+};
 
 export type AuditLog = {
   id: string;

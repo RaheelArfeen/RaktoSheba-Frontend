@@ -1,5 +1,5 @@
 import { env } from "@/config/env";
-import type { ApiEnvelope, PaginationMeta } from "@/types";
+import type { ApiEnvelope, ApiSuccess, PaginationMeta } from "@/types";
 
 export const API_BASE_URL = env.apiBaseUrl;
 export const API_URL = `${API_BASE_URL}/api/v1`;
@@ -27,7 +27,7 @@ export type ApiRequestOptions = Omit<RequestInit, "body"> & {
   token?: string | null;
 };
 
-const toQueryString = (query?: Query) => {
+export const toQueryString = (query?: Query) => {
   if (!query) return "";
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(query)) {
@@ -36,6 +36,21 @@ const toQueryString = (query?: Query) => {
   const qs = params.toString();
   return qs ? `?${qs}` : "";
 };
+
+/** Turns a raw response into the backend envelope, throwing on failure or unexpected bodies. */
+export async function parseEnvelope<T>(response: Response): Promise<ApiSuccess<T>> {
+  const envelope = (await response.json().catch(() => null)) as ApiEnvelope<T> | null;
+
+  if (!envelope) {
+    throw new ApiError("The server sent an unexpected response.", response.status);
+  }
+  if (!envelope.success || !response.ok) {
+    const failure = envelope.success ? { message: "Something went wrong.", errors: [] } : envelope;
+    throw new ApiError(failure.message || "Something went wrong.", response.status, failure.errors);
+  }
+
+  return envelope;
+}
 
 async function request<T>(path: string, options: ApiRequestOptions = {}) {
   const { body, query, token, headers, ...init } = options;
@@ -56,17 +71,7 @@ async function request<T>(path: string, options: ApiRequestOptions = {}) {
     throw new ApiError("We couldn't reach RaktoSheba. Check your connection and try again.", 0);
   }
 
-  const envelope = (await response.json().catch(() => null)) as ApiEnvelope<T> | null;
-
-  if (!envelope) {
-    throw new ApiError("The server sent an unexpected response.", response.status);
-  }
-  if (!envelope.success || !response.ok) {
-    const failure = envelope.success ? { message: "Something went wrong.", errors: [] } : envelope;
-    throw new ApiError(failure.message || "Something went wrong.", response.status, failure.errors);
-  }
-
-  return envelope;
+  return parseEnvelope<T>(response);
 }
 
 /** Calls the API and returns `data`. Works in Server and Client Components. */

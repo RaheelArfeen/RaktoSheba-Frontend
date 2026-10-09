@@ -1,45 +1,61 @@
-import type { BloodRequest, BloodRequestDetail, CreateBloodRequestInput, Hospital, RequestBoardQuery } from "@/types";
-import type { HospitalEditValues } from "@/lib/validations";
-import { api, apiPaginated, API_URL } from "./api";
+import type { Hospital, HospitalType, RequestBoardQuery, RequestStatus, VerificationStatus } from "@/types";
+import { HOSPITAL_TYPES, type HospitalProfileValues } from "@/lib/validations";
 
-export const hospitalApi = {
-  /** The signed-in hospital's own profile, including verification status. */
-  me: (token: string) => api<Hospital>("/hospitals/me", { token, cache: "no-store" }),
-
-  /** Update the hospital's name and address. */
-  updateProfile: (token: string, body: HospitalEditValues) =>
-    api<Hospital>("/hospitals/me", { method: "PATCH", token, cache: "no-store", body }),
-
-  /** Upload a licence document (multipart). Bypasses the JSON helper. */
-  uploadLicence: async (token: string, formData: FormData): Promise<{ success: boolean; message?: string }> => {
-    const response = await fetch(`${API_URL}/hospitals/me/licence`, {
-      method: "POST",
-      headers: { authorization: `Bearer ${token}` },
-      body: formData,
-      cache: "no-store",
-    });
-    const result = (await response.json().catch(() => null)) as { success?: boolean; message?: string } | null;
-    if (!response.ok || !result?.success) {
-      throw new Error(result?.message ?? "The upload failed. Please try again.");
-    }
-    return result as { success: boolean; message?: string };
-  },
+export const boardStatusToApi = (status?: RequestBoardQuery["status"]): RequestStatus | undefined => {
+  if (!status || status === "all") return undefined;
+  if (status === "open") return "VERIFIED";
+  if (status === "pending") return "PENDING";
+  if (status === "matched") return "MATCHED";
+  if (status === "fulfilled") return "FULFILLED";
+  if (status === "cancelled") return "CANCELLED";
+  return undefined;
 };
 
-export const hospitalRequestApi = {
-  /** Paginated list of the signed-in hospital's blood requests. */
-  myRequests: (token: string, query: RequestBoardQuery) =>
-    apiPaginated<BloodRequest[]>("/hospitals/me/requests", { token, cache: "no-store", query }),
-
-  /** Single request detail by id. */
-  requestById: (token: string, id: string) =>
-    api<BloodRequestDetail>("/hospitals/me/requests/" + id, { token, cache: "no-store" }),
-
-  /** Post a new blood request. */
-  createRequest: (token: string, body: CreateBloodRequestInput) =>
-    api<BloodRequest>("/hospitals/me/requests", { method: "POST", token, cache: "no-store", body }),
-
-  /** Mark a matched request as fulfilled. */
-  fulfillRequest: (token: string, requestId: string) =>
-    api<BloodRequest>("/hospitals/me/requests/" + requestId + "/fulfill", { method: "PATCH", token, cache: "no-store" }),
+/** Pill styling for the three hospital verification states. */
+export const VERIFICATION_META: Record<VerificationStatus, { label: string; pill: string; dot: string }> = {
+  VERIFIED: { label: "Verified", pill: "bg-mint text-forest", dot: "bg-mint-strong" },
+  PENDING: { label: "Pending", pill: "bg-sand text-sand-deep", dot: "bg-gold" },
+  REJECTED: { label: "Rejected", pill: "bg-blush text-blood", dot: "bg-blood" },
 };
+
+/** Human label for a stored hospital type, or null when the hospital hasn't picked one. */
+export const hospitalTypeLabel = (type: HospitalType | null | undefined) =>
+  HOSPITAL_TYPES.find((t) => t.value === type)?.label ?? null;
+
+/** Body for POST /hospitals and PATCH /hospitals/me. Blank inputs are omitted, not sent as "". */
+export const toHospitalPayload = (values: HospitalProfileValues) => {
+  const text = (v?: string) => (v?.trim() ? v.trim() : undefined);
+  return {
+    name: values.hospitalName.trim(),
+    address: values.hospitalAddress.trim(),
+    type: (values.hospitalType || undefined) as HospitalType | undefined,
+    email: text(values.email),
+    district: values.district.trim(),
+    upazila: text(values.upazila),
+    phone: values.phone.trim(),
+    emergencyPhone: text(values.emergencyPhone),
+    website: text(values.website),
+    openHours: text(values.openHours),
+    hasEmergencyService: values.hasEmergencyService,
+    licenseNumber: text(values.licenseNumber),
+    description: text(values.description),
+  };
+};
+
+/** Form defaults for the shared hospital fields, from a stored profile if there is one. */
+export const toHospitalFormValues = (hospital?: Hospital | null): HospitalProfileValues => ({
+  hospitalName: hospital?.name ?? "",
+  hospitalAddress: hospital?.address ?? "",
+  hospitalType: hospital?.type ?? "",
+  email: hospital?.email ?? "",
+  phone: hospital?.phone ?? "",
+  emergencyPhone: hospital?.emergencyPhone ?? "",
+  district: hospital?.district ?? "",
+  upazila: hospital?.upazila ?? "",
+  website: hospital?.website ?? "",
+  openHours: hospital?.openHours ?? "",
+  hasEmergencyService: hospital?.hasEmergencyService ?? false,
+  licenseNumber: hospital?.licenseNumber ?? "",
+  description: hospital?.description ?? "",
+});
+
