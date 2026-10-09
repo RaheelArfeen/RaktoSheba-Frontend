@@ -21,7 +21,7 @@ export function ActivityFeed() {
         </div>
         <Link
           href="/dashboard/admin/payments?tab=audit"
-          className="flex items-center gap-1 text-xs font-extrabold text-blood hover:text-blood-deep"
+          className="flex shrink-0 items-center gap-1 text-xs font-extrabold whitespace-nowrap text-blood hover:text-blood-deep"
         >
           Full log <ArrowRight size={13} />
         </Link>
@@ -55,10 +55,9 @@ export function ActivityFeed() {
                 <li key={log.id} className="relative flex gap-3.5 py-1.5 pl-0">
                   <span className={cn("relative z-10 mt-1 size-[15px] shrink-0 rounded-full border-[3px] border-cream", meta.dot)} />
                   <div className="min-w-0">
-                    <p className="truncate text-sm text-ink">
-                      <span className="font-bold">{log.actor.email}</span>{" "}
-                      <span className="text-ink-muted">{meta.label}</span>
-                    </p>
+                    {/* Email on its own line (it can be long); the action reads in full underneath. */}
+                    <p className="truncate text-sm font-bold text-ink">{log.actor.email}</p>
+                    <p className="text-sm text-ink-muted">{meta.label}</p>
                     <p className="mt-0.5 text-xs font-semibold text-ink-faint">
                       {timeAgo(log.createdAt)} · {log.targetType}
                     </p>
