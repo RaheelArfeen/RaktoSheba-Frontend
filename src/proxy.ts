@@ -84,5 +84,5 @@ function nextWithToken(request: NextRequest, refreshed: string | null) {
 
 export const config = {
   // Everything except static files and images.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:webp|png|jpg|jpeg|svg|ico)$).*)"],
+  matcher: ["/((?!_next/static|_next/image|icon.svg|robots.txt|sitemap.xml|.*\\.(?:webp|png|jpg|jpeg|svg|ico)$).*)"],
 };
