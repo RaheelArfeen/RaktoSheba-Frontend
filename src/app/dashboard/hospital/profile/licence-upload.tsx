@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useRef, useState } from "react";
 import { FileCheck, Upload } from "lucide-react";
 import { toast } from "sonner";
-import { uploadLicenceDoc } from "@/app/actions/hospital";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { errorMessage } from "@/lib/client-api";
+import { useUploadLicence } from "@/lib/queries/use-hospital";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 const MAX_BYTES = 5 * 1024 * 1024;
@@ -19,7 +20,8 @@ const formatBytes = (bytes: number) => {
 export function LicenceUpload({ licenseDocUrl }: { licenseDocUrl: string | null }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [pending, startTransition] = useTransition();
+  const uploadLicence = useUploadLicence();
+  const pending = uploadLicence.isPending;
 
   const choose = (picked: File | undefined) => {
     if (!picked) return;
@@ -34,16 +36,16 @@ export function LicenceUpload({ licenseDocUrl }: { licenseDocUrl: string | null 
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const upload = () =>
-    startTransition(async () => {
-      if (!file) return;
-      const data = new FormData();
-      data.set("licence", file);
-      const result = await uploadLicenceDoc(data);
-      if ("error" in result) return void toast.error(result.error);
-      toast.success("Licence uploaded.");
-      cancel();
+  const upload = () => {
+    if (!file) return;
+    uploadLicence.mutate(file, {
+      onSuccess: () => {
+        toast.success("Licence uploaded.");
+        cancel();
+      },
+      onError: (error) => toast.error(errorMessage(error)),
     });
+  };
 
   return (
     <div className="flex flex-col gap-5 rounded-[26px] border border-ink/10 bg-cream p-6 sm:p-8">
