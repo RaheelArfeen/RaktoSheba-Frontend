@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -15,12 +15,13 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { createBloodRequest } from "@/app/actions/hospital";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { BLOOD_GROUPS, bloodGroupLabel } from "@/lib/blood";
 import { cn } from "@/lib/cn";
+import { errorMessage } from "@/lib/client-api";
+import { useCreateRequest } from "@/lib/queries/use-hospital";
 import {
   bloodRequestWizardSchema,
   requestWizardSteps,
@@ -73,7 +74,8 @@ export function NewRequestWizard() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [locating, setLocating] = useState(false);
-  const [pending, startTransition] = useTransition();
+  const create = useCreateRequest();
+  const pending = create.isPending;
 
   const {
     register,
@@ -124,13 +126,9 @@ export function NewRequestWizard() {
   const urgencyLabel = urgencyOption?.title ?? "Unknown";
 
   const onSubmit = (values: BloodRequestWizardValues) => {
-    startTransition(async () => {
-      const result = await createBloodRequest(values);
-      if ("error" in result) {
-        toast.error(result.error);
-      } else {
-        router.push("/dashboard/hospital/requests/" + result.id);
-      }
+    create.mutate(values, {
+      onSuccess: (request) => router.push(`/dashboard/hospital/requests/${request.id}`),
+      onError: (error) => toast.error(errorMessage(error)),
     });
   };
 
@@ -291,21 +289,21 @@ export function NewRequestWizard() {
             Review the details before posting. Donors will be alerted after admin verification.
           </p>
           <div className="divide-y divide-ink/10 rounded-2xl border border-ink/10 bg-paper">
-            <div className="flex items-center justify-between px-5 py-4">
+            <div className="flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4">
               <span className="text-sm font-semibold text-ink-muted">Blood group</span>
               <span className="font-extrabold text-blood">
                 {bloodGroup ? bloodGroupLabel[bloodGroup] : "—"}
               </span>
             </div>
-            <div className="flex items-center justify-between px-5 py-4">
+            <div className="flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4">
               <span className="text-sm font-semibold text-ink-muted">Urgency</span>
               <span className="font-extrabold">{urgencyLabel}</span>
             </div>
-            <div className="flex items-center justify-between px-5 py-4">
+            <div className="flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4">
               <span className="text-sm font-semibold text-ink-muted">Units needed</span>
               <span className="font-extrabold">{String(units ?? "—")}</span>
             </div>
-            <div className="flex items-start justify-between gap-4 px-5 py-4">
+            <div className="flex items-start justify-between gap-4 px-4 py-3.5 sm:px-5 sm:py-4">
               <span className="text-sm font-semibold text-ink-muted">Location</span>
               <span className="max-w-[60%] text-right font-semibold">{location || "—"}</span>
             </div>
