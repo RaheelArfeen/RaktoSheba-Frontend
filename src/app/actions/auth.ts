@@ -47,6 +47,24 @@ export async function login(values: LoginValues, next?: string): Promise<ActionR
   redirect(target);
 }
 
+// Public demo accounts created by the backend seed, so reviewers can try each role in one click.
+// They live on the server only; set DEMO_PASSWORD if the seed password ever changes.
+const DEMO_ACCOUNTS = {
+  DONOR: "donor@raktosheba.com",
+  HOSPITAL: "hospital@raktosheba.com",
+  ADMIN: "admin@raktosheba.com",
+} as const;
+
+export type DemoRole = keyof typeof DEMO_ACCOUNTS;
+
+/** Signs in as the demo account for a role. */
+export async function demoLogin(role: DemoRole, next?: string): Promise<ActionResult> {
+  if (!(role in DEMO_ACCOUNTS)) return { error: "Unknown demo account." };
+  // Ignore a `next` pointing at another role's dashboard, so each demo opens its own.
+  const target = next?.startsWith("/dashboard") && !next.startsWith(dashboardPath(role)) ? undefined : next;
+  return login({ email: DEMO_ACCOUNTS[role], password: process.env.DEMO_PASSWORD ?? "Demo@1234" }, target);
+}
+
 export async function register(values: RegisterValues): Promise<ActionResult> {
   const parsed = registerSchema.safeParse(values);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Please check the form and try again." };
