@@ -14,15 +14,15 @@ const groupTone = {
   standard: "bg-mint text-forest",
 };
 
-/** One blood request on a board. Links to its public detail page. */
-export function RequestCard({ request }: { request: PublicRequest }) {
+/** One blood request on a board. Links to its public detail page unless `href` is set. */
+export function RequestCard({ request, href }: { request: PublicRequest; href?: string }) {
   const level = emergencyLevel(request.urgency);
   const open = request.status === "VERIFIED";
   const pulsing = open && level === "critical";
 
   return (
     <Link
-      href={`/requests/${request.id}`}
+      href={href ?? `/requests/${request.id}`}
       className={cn(
         "group flex flex-col gap-4 rounded-[24px] border bg-cream p-5 shadow-[0_14px_40px_rgba(91,44,30,.05)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(91,44,30,.1)] sm:flex-row sm:items-center sm:justify-between",
         pulsing ? "border-blood/30" : "border-ink/10",
