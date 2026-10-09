@@ -11,7 +11,7 @@ export default function AdminLoading() {
       </div>
       <Skeleton className="h-[172px] rounded-[26px]" />
       <StatCardsSkeleton count={4} />
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="rounded-[24px] border border-ink/10 bg-cream p-6 lg:col-span-2">
           <Skeleton className="h-5 w-56" />
           <Skeleton className="mt-4 h-[260px] rounded-2xl" />
@@ -27,7 +27,7 @@ export default function AdminLoading() {
           </div>
         </div>
       </div>
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="space-y-3 rounded-[24px] border border-ink/10 bg-cream p-6 lg:col-span-2">
           <Skeleton className="h-5 w-44" />
           {Array.from({ length: 3 }).map((_, i) => (

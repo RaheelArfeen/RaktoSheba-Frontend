@@ -203,7 +203,7 @@ function OverviewBody({ hospital }: { hospital: Hospital }) {
         </div>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <section aria-labelledby="recent-heading" className="space-y-4 lg:col-span-2">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
@@ -369,7 +369,7 @@ function OverviewSkeleton() {
           <Skeleton key={i} className="h-[130px] rounded-[24px] sm:h-[142px]" />
         ))}
       </div>
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="space-y-3 lg:col-span-2">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-[112px] rounded-[24px]" />

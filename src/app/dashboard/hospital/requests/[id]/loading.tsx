@@ -7,7 +7,7 @@ export default function Loading() {
       <Skeleton className="h-12 w-64" />
 
       {/* Two-column layout */}
-      <div className="grid gap-6 lg:grid-cols-[1.35fr_.65fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_.65fr]">
         <Skeleton className="h-48 rounded-[26px]" />
         <Skeleton className="h-48 rounded-[26px]" />
       </div>

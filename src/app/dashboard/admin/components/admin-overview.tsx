@@ -84,7 +84,7 @@ export function AdminOverview() {
 
       <KpiCards />
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <ActivityChart className="lg:col-span-2" />
         <div className="space-y-4">
           <EmergencyPanel />
@@ -92,7 +92,7 @@ export function AdminOverview() {
         </div>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <QueuePreview className="lg:col-span-2" />
         <ActivityFeed />
       </div>

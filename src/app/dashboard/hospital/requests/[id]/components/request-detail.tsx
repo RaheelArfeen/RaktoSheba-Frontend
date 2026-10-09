@@ -52,7 +52,7 @@ export function RequestDetail({ id }: { id: string }) {
     return (
       <div className="space-y-6">
         <BackLink />
-        <div className="grid gap-6 lg:grid-cols-[1.35fr_.65fr]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_.65fr]">
           <div className="space-y-6">
             <Skeleton className="h-48 rounded-[30px]" />
             <div className="grid grid-cols-2 gap-3">
@@ -112,7 +112,7 @@ export function RequestDetail({ id }: { id: string }) {
         <FetchingHint active={isFetching} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1.35fr_.65fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_.65fr]">
         {/* Left column */}
         <div className="space-y-6">
           {/* Hero card */}

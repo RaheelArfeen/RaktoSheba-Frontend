@@ -45,7 +45,7 @@ export function HospitalProfileView() {
         </h1>
         <p className="mt-2 text-ink-muted">Signed in as {user.email}</p>
       </div>
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
         <LogoUpload logoUrl={hospital.logoUrl ?? null} />
         <LicenceUpload licenseDocUrl={hospital.licenseDocUrl ?? null} />
       </div>
@@ -62,7 +62,7 @@ function ProfileSkeleton() {
         <Skeleton className="h-10 w-72 max-w-full" />
         <Skeleton className="h-4 w-52" />
       </div>
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
         <Skeleton className="h-[168px] rounded-[26px]" />
         <Skeleton className="h-[168px] rounded-[26px]" />
       </div>
