@@ -1,7 +1,7 @@
 "use client";
 
+import * as Switch from "@radix-ui/react-switch";
 import { toast } from "sonner";
-import { cn } from "@/lib/cn";
 import { errorMessage } from "@/lib/client-api";
 import { useSetAvailability } from "@/lib/queries/use-donor";
 
@@ -34,20 +34,15 @@ export function AvailabilityToggle({ isAvailable }: { isAvailable: boolean }) {
           {isAvailable ? "Hospitals can match you with requests your blood can help." : "Turn this on when you're ready to help again."}
         </p>
       </div>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={isAvailable}
+      <Switch.Root
+        checked={isAvailable}
+        onCheckedChange={toggle}
         aria-labelledby="availability-label"
-        onClick={toggle}
         disabled={setAvailability.isPending}
-        className={cn(
-          "relative h-8 w-14 shrink-0 rounded-full transition-colors disabled:opacity-70",
-          isAvailable ? "bg-forest" : "bg-ink/20",
-        )}
+        className="relative h-8 w-14 shrink-0 rounded-full bg-ink/20 transition-colors disabled:opacity-70 data-[state=checked]:bg-forest"
       >
-        <span className={cn("absolute top-1 left-1 size-6 rounded-full bg-white shadow transition-transform", isAvailable && "translate-x-6")} />
-      </button>
+        <Switch.Thumb className="block size-6 translate-x-1 rounded-full bg-white shadow transition-transform data-[state=checked]:translate-x-7" />
+      </Switch.Root>
     </div>
   );
 }
