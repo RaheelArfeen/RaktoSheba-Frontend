@@ -4,7 +4,7 @@
  * Must never throw at import time: `.env.local` is gitignored, so Vercel
  * builds run without it unless the vars are set in the project dashboard.
  * A missing value falls back to production so `next build` always succeeds;
- * set NEXT_PUBLIC_API_BASE_URL in Vercel to point at your backend.
+ * set API_BASE_URL in Vercel to point at your backend.
  */
 const DEFAULT_API_BASE_URL = "https://raktosheba-backend.vercel.app";
 
@@ -18,7 +18,7 @@ function optionalUrl(name: string, value: string | undefined, fallback: string) 
 
 export const env = {
   /** Backend origin, e.g. http://localhost:8000 (no /api/v1). */
-  apiBaseUrl: optionalUrl("NEXT_PUBLIC_API_BASE_URL", process.env.NEXT_PUBLIC_API_BASE_URL, DEFAULT_API_BASE_URL),
+  apiBaseUrl: optionalUrl("API_BASE_URL", process.env.API_BASE_URL, DEFAULT_API_BASE_URL),
   /** Public URL of this site, used for metadata. */
   siteUrl: optionalUrl("NEXT_PUBLIC_SITE_URL", process.env.NEXT_PUBLIC_SITE_URL, "http://localhost:3000"),
 };
