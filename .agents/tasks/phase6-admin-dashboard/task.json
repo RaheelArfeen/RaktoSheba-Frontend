@@ -1,7 +1,0 @@
-{
-  "task_id": "task-phase6-admin-dashboard",
-  "task_description": "Phase 6 — Admin Dashboard. Four commits: (25) admin overview with Recharts time-series charts; (26) verification queue (critical-first) with verify/cancel actions; (27) hospital and user management tables with pagination; (28) payments and audit log views.",
-  "status": "pending",
-  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004"],
-  "blocked_reason": null
-}
