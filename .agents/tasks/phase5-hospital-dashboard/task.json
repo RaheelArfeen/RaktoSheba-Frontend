@@ -1,0 +1,7 @@
+{
+  "task_id": "task-phase5-hospital-dashboard",
+  "task_description": "Implement Phase 5 — Hospital Dashboard: overview with real stats and request list (commit 21), new request wizard (commit 22), request detail with matched-donor card and mark-fulfilled action (commit 23), hospital profile editor and licence upload (commit 24).",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004"],
+  "blocked_reason": null
+}

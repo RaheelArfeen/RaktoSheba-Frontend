@@ -1,0 +1,29 @@
+{
+  "id": "FEAT-004",
+  "type": "feat",
+  "description": "Commit 28 — Payments and audit log views at a single /dashboard/admin/payments page. Two tabs: 'Payments' (paginated list of all payments using the existing paymentsApi.adminList or a new adminApi.payments endpoint) and 'Audit log' (paginated list of AuditLog entries). Both are read-only tables. Independent from FEAT-002/003 in terms of UI; depends on FEAT-002 having created src/app/actions/admin.ts for the adminToken pattern.",
+  "status": "pending",
+  "steps": [
+    "1. Extend src/lib/admin.ts: add two more list methods. Import `AuditLog, Payment` — both already exist in src/types/index.ts. Add: `payments: (token: string, query?: { page?: number; limit?: number }) => apiPaginated<Payment[]>('/admin/payments', { token, cache: 'no-store', query })` and `auditLog: (token: string, query?: { page?: number; limit?: number }) => apiPaginated<AuditLog[]>('/admin/audit', { token, cache: 'no-store', query })`. Keep all existing methods unchanged.",
+    "2. Create src/app/dashboard/admin/payments/page.tsx as an async Server Component. Metadata `{ title: 'Payments & audit log' }`. Parse `tab` ('payments' | 'audit', default 'payments') and `page` (default 1) from searchParams (typed as `Promise<Record<string, string | string[] | undefined>>`). Fetch based on tab: if `tab === 'payments'`, call `adminApi.payments(token, { page, limit: 20 })`; if `tab === 'audit'`, call `adminApi.auditLog(token, { page, limit: 20 })`. Store result as `{ data, meta }`. Render: Eyebrow 'Financials & audit' + h1 'Payments & audit log'. Two tab buttons ('Payments' / 'Audit log') rendered as `<ButtonLink>` pointing to `?tab=payments` / `?tab=audit` with `variant={active ? 'soft' : 'ghost'} size='sm'`. Below tabs, conditionally render either the payments list or the audit list with pagination. Import `adminApi` from `@/lib/admin`, `getSession` from `@/lib/session`, `ButtonLink` from `@/components/ui/button`, `Eyebrow` from `@/components/ui/eyebrow`, `formatCurrency, formatDate, formatDateTime` from `@/lib/format`.",
+    "3. For the Payments tab: render a list of payment rows inside the same page component (no separate client component needed — read-only). Each row: `<div className='flex flex-col gap-2 rounded-[24px] border border-ink/10 bg-cream p-5 sm:flex-row sm:items-center sm:justify-between'>`. Left: user email (`payment.user?.email ?? payment.userId`), purpose badge (PLATFORM_DONATION → `bg-blush text-blood`, EMERGENCY_FUND → `bg-sand text-sand-deep`) using the `<Badge>` component from `@/components/ui/badge`, date (`formatDate(payment.createdAt)`). Right: amount `<p className='font-display text-xl'>{formatCurrency(payment.amount, payment.currency)}</p>`, status badge (PAID → `bg-mint text-forest`; PENDING → `bg-sand text-sand-deep`; FAILED → `bg-linen text-ink-muted`) using `<Badge>`. Empty state: 'No payments yet.'",
+    "4. For the Audit log tab: render audit log rows inline. Each row: `<div className='flex flex-col gap-1 rounded-2xl border border-ink/10 bg-cream px-5 py-4'>`. Actor email (`log.actor.email`), action string in a monospace `<code className='rounded bg-paper px-2 py-0.5 text-xs font-mono text-blood'>{log.action}</code>`, target type + id (`log.targetType + ' ' + log.targetId` in text-xs text-ink-faint), timestamp `formatDateTime(log.createdAt)`. Empty state: 'No audit entries.'",
+    "5. Add pagination for both tabs: after the list, show total count as `<p className='text-sm font-semibold text-ink-muted'>{meta.total} {tab === 'audit' ? 'entries' : 'payments'}</p>` and Prev/Next `<ButtonLink>` pointing to `?tab=...&page=N` (hide Prev on page 1, hide Next when page >= totalPages).",
+    "6. Create src/app/dashboard/admin/payments/loading.tsx: export default `PaymentsLoading()` with `<LoadingLabel>Loading payments…</LoadingLabel>` and 8 row skeletons: `<div className='rounded-[24px] border border-ink/10 bg-cream p-5'><div className='flex items-center justify-between'><div className='space-y-2'><Skeleton className='h-4 w-40' /><Skeleton className='h-3 w-28' /></div><Skeleton className='h-7 w-20' /></div></div>`.",
+    "7. Commit: `git add src/lib/admin.ts src/app/dashboard/admin/payments/ && git commit -m 'feat: add payments and audit log views'`"
+  ],
+  "acceptance_criteria": [
+    "npm run build exits 0 — no TypeScript errors",
+    "npm run lint exits 0",
+    "src/app/dashboard/admin/payments/page.tsx is a Server Component handling both 'payments' and 'audit' tabs",
+    "adminApi.payments and adminApi.auditLog are exported from src/lib/admin.ts",
+    "Payments rows use formatCurrency from src/lib/format.ts",
+    "Audit log rows render action in a monospace code element"
+  ],
+  "verification": [
+    "cd /Users/raheelarfeen/Programming-Hero_lvl_2/Assignment_6+7/RaktoSheba-Frontend && npm run build",
+    "npm run lint"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

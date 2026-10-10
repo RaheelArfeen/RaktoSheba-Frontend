@@ -1,0 +1,28 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Commit 23 — Request detail page at /dashboard/hospital/requests/[id] showing status timeline, matched donor card, request facts, and a 'Mark fulfilled' button. Depends on FEAT-001 (hospitalRequestApi.requestById) and FEAT-002 (hospital.ts actions file exists to add fulfillRequest to).",
+  "status": "completed",
+  "steps": [
+    "1. Edit src/app/actions/hospital.ts: add `fulfillRequest(requestId: string): Promise<ActionResult>` — call `hospitalRequestApi.fulfillRequest(token, requestId)`, `revalidatePath('/dashboard/hospital/requests', 'layout')`, `revalidatePath('/dashboard/hospital/requests/' + requestId)`, return `{ ok: true }` or `{ error: messageFor(e) }`. Add `type ActionResult = { error: string } | { ok: true }` if not already present.",
+    "2. Create src/app/dashboard/hospital/requests/[id]/not-found.tsx: render a centred card with h1 'Request not found', a short message, and a ButtonLink to '/dashboard/hospital/requests' labelled '← Back to requests'.",
+    "3. Create src/app/dashboard/hospital/requests/[id]/loading.tsx: export default Loading() with two skeleton sections: a Skeleton for the header area (h-12 w-64) and two side-by-side Skeletons for the two-column layout (h-48 rounded-[26px] each in a grid gap-6 lg:grid-cols-[1.35fr_.65fr]).",
+    "4. Create src/app/dashboard/hospital/requests/[id]/fulfill-button.tsx: `\"use client\"`. Props: `requestId: string`, `status: RequestStatus`. Imports: `useState, useTransition`, `CheckCircle2` lucide icon, `toast` sonner, `fulfillRequest` from `@/app/actions/hospital`, `Button` from `@/components/ui/button`, `Spinner` from `@/components/ui/spinner`, `ConfirmDialog` from `@/components/ui/confirm-dialog`. State: `open` boolean. Only renders when `status === 'MATCHED'`. Button labelled 'Mark fulfilled' with CheckCircle2 icon, variant='forest'. On click: set `open=true`. Dialog: title 'Mark request as fulfilled?', body text 'This confirms the donation is complete and closes the request.', confirmLabel 'Yes, mark fulfilled', tone='primary'. On confirm: call `fulfillRequest(requestId)` inside startTransition, on error `toast.error(...)`, on success `toast.success('Request marked as fulfilled.')` and close dialog.",
+    "5. Create src/app/dashboard/hospital/requests/[id]/page.tsx: async Server Component. Signature: `export default async function HospitalRequestDetailPage({ params }: PageProps<'/dashboard/hospital/requests/[id]'>)`. Call `(await params).id` to get the id. Fetch `hospitalRequestApi.requestById(session.accessToken, id)` — if ApiError 404 or 400, call `notFound()`. Two-column layout `grid gap-6 lg:grid-cols-[1.35fr_.65fr]`. Left column: request hero card (blood group, urgency badge, units, hospital name — same style as the public requests/[id] page hero card but simpler since it's the hospital's own); facts grid (BloodGroup / Units / Urgency label / Created); if status MATCHED and donation exists, a Matched Donor card showing `donation.donor.bloodGroup` badge + `donation.donor.user.email` + scheduled date. Right column: `<FulfillButton requestId={id} status={request.status} />` at top when MATCHED; `<StatusTimeline>` — map `BloodRequestDetail` to the `PublicRequestDetail` shape the timeline expects: `{ id, bloodGroup, unitsNeeded, urgency, status, createdAt, hospital: request.requester.hospital ?? null, donation: request.donation ? { status: request.donation.status, scheduledAt: request.donation.scheduledAt, completedAt: request.donation.completedAt } : null }`. Add a back link 'Back to requests' at the top. Add metadata via `generateMetadata` returning title `blood group + ' request — ' + hospital name`.",
+    "6. Commit: `git add src/app/actions/hospital.ts src/app/dashboard/hospital/requests/[id]/` && `git commit -m 'feat: add request detail with matched donors and fulfil'`"
+  ],
+  "acceptance_criteria": [
+    "npm run build exits 0",
+    "npm run lint exits 0",
+    "src/app/dashboard/hospital/requests/[id]/page.tsx exists as a Server Component with generateMetadata",
+    "src/app/dashboard/hospital/requests/[id]/fulfill-button.tsx exists as a client component using ConfirmDialog",
+    "src/app/dashboard/hospital/requests/[id]/not-found.tsx exists",
+    "fulfillRequest is exported from src/app/actions/hospital.ts"
+  ],
+  "verification": [
+    "cd /Users/raheelarfeen/Programming-Hero_lvl_2/Assignment_6+7/RaktoSheba-Frontend && npm run build",
+    "npm run lint"
+  ],
+  "blocked_reason": null,
+  "findings": "1. ActionResult type: `type ActionResult = { error: string } | { ok: true }` is now exported from src/app/actions/hospital.ts — FEAT-004 server actions should import and use this type rather than redefining it. 2. fulfillRequest revalidates both '/dashboard/hospital/requests' (layout) and the individual request path so both the list and detail pages refresh after fulfil. 3. toPublicRequestDetail() helper (local to page.tsx) maps BloodRequestDetail → PublicRequestDetail for StatusTimeline — FEAT-004 does not need this. 4. hospitalEditSchema is still not defined in validations.ts — FEAT-004 must add it. 5. The getRequest cache helper in page.tsx calls getSession() internally each time it runs; since React cache deduplicates by argument (id), the hospital API is called once per request even with generateMetadata + the page both calling getRequest. 6. PageProps generic for /dashboard/hospital/requests/[id] is available in routes.d.ts after the first build — FEAT-004 can use PageProps<'/dashboard/hospital/profile'> for its own page if that route is registered."
+}
