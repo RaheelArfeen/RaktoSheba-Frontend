@@ -1,4 +1,3 @@
-import { API_URL } from "@/lib/api";
 import { cn } from "@/lib/cn";
 
 /**
@@ -6,13 +5,14 @@ import { cn } from "@/lib/cn";
  * works before JavaScript loads. `role` is used only when a new account is created.
  */
 export function GoogleButton({ role, next, label = "Continue with Google", className }: { role?: "DONOR" | "HOSPITAL"; next?: string; label?: string; className?: string }) {
-  const url = new URL(`${API_URL}/auth/google`);
-  if (role) url.searchParams.set("role", role);
-  if (next) url.searchParams.set("next", next);
+  const params = new URLSearchParams();
+  if (role) params.set("role", role);
+  if (next) params.set("next", next);
+  const href = `/auth/google/start${params.size ? `?${params}` : ""}`;
 
   return (
     <a
-      href={url.toString()}
+      href={href}
       className={cn(
         "flex h-12 w-full items-center justify-center gap-3 rounded-full border border-ink/15 bg-cream text-sm font-bold text-ink-soft transition-colors hover:border-blood/30 hover:bg-white",
         className,
