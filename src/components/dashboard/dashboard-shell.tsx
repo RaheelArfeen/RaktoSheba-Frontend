@@ -9,6 +9,7 @@ import { cn } from "@/lib/cn";
 import type { AuthUser } from "@/types";
 import { dashboardNav, roleLabel, siteLink, type NavItem } from "./nav-config";
 import { CurrentUserProvider } from "./user-context";
+import { NotificationBell, NotificationProvider } from "@/components/notifications/notification-bell";
 
 function isNavActive(pathname: string, href: string) {
   if (pathname === href) return true;
@@ -48,13 +49,17 @@ function NavLinks({ items, onNavigate }: { items: NavItem[]; onNavigate?: () => 
 function Sidebar({ user, onNavigate }: { user: AuthUser; onNavigate?: () => void }) {
   return (
     <div className="flex h-full flex-col bg-maroon px-5 py-7">
-      <Link href="/" onClick={onNavigate} className="flex items-center gap-3">
-        <span className="relative grid size-10 place-items-center rounded-[13px] bg-blood text-cream">
-          <span className="absolute -top-1.5 right-0 size-3 rounded-full bg-mint-strong" />
-          <HeartPulse size={22} strokeWidth={2.2} aria-hidden />
-        </span>
-        <span className="font-display text-lg tracking-[-.01em] text-cream">RaktoSheba</span>
-      </Link>
+      <div className="flex items-center justify-between gap-2">
+        <Link href="/" onClick={onNavigate} className="flex items-center gap-3">
+          <span className="relative grid size-10 place-items-center rounded-[13px] bg-blood text-cream">
+            <span className="absolute -top-1.5 right-0 size-3 rounded-full bg-mint-strong" />
+            <HeartPulse size={22} strokeWidth={2.2} aria-hidden />
+          </span>
+          <span className="font-display text-lg tracking-[-.01em] text-cream">RaktoSheba</span>
+        </Link>
+        {/* On phones the bell lives in the top bar instead of the slide-out menu. */}
+        {!onNavigate && <NotificationBell placement="side" />}
+      </div>
       <p className="mt-12 px-3 text-[10px] font-extrabold tracking-[.18em] text-[#f2d8ca]/50 uppercase">{roleLabel[user.role]} workspace</p>
       <div className="mt-3">
         <NavLinks items={dashboardNav[user.role]} onNavigate={onNavigate} />
@@ -92,47 +97,52 @@ export function DashboardShell({ user, children }: { user: AuthUser; children: R
   }, [open]);
 
   return (
-    <div className="min-h-screen bg-paper">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[264px] lg:block">
-        <Sidebar user={user} />
-      </aside>
+    <NotificationProvider role={user.role}>
+      <div className="min-h-screen bg-paper">
+        <aside className="fixed inset-y-0 left-0 z-30 hidden w-[264px] lg:block">
+          <Sidebar user={user} />
+        </aside>
 
-      {open && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Dashboard menu">
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={() => setOpen(false)}
-            className="animate-fade-in absolute inset-0 bg-ink/45 backdrop-blur-sm"
-          />
-          <div className="animate-drawer-in absolute inset-y-0 left-0 w-[280px] overflow-y-auto overscroll-contain shadow-[24px_0_60px_rgba(62,41,36,.3)]">
-            <Sidebar user={user} onNavigate={() => setOpen(false)} />
+        {open && (
+          <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Dashboard menu">
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+              className="animate-fade-in absolute inset-0 bg-ink/45 backdrop-blur-sm"
+            />
+            <div className="animate-drawer-in absolute inset-y-0 left-0 w-[280px] overflow-y-auto overscroll-contain shadow-[24px_0_60px_rgba(62,41,36,.3)]">
+              <Sidebar user={user} onNavigate={() => setOpen(false)} />
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="animate-fade-in absolute top-5 right-5 grid size-10 place-items-center rounded-full bg-cream text-ink shadow-lg"
+            >
+              <X size={18} />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            aria-label="Close menu"
-            className="animate-fade-in absolute top-5 right-5 grid size-10 place-items-center rounded-full bg-cream text-ink shadow-lg"
-          >
-            <X size={18} />
-          </button>
-        </div>
-      )}
+        )}
 
-      <div className="lg:pl-[264px]">
-        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-ink/10 bg-paper/85 px-4 py-3.5 backdrop-blur-xl sm:px-5 sm:py-4 lg:hidden">
-          <button type="button" onClick={() => setOpen(true)} aria-label="Open menu" className="grid size-10 place-items-center rounded-full text-ink-muted transition-colors hover:bg-linen hover:text-ink">
-            <Menu size={20} />
-          </button>
-          <span className="relative grid size-8 shrink-0 place-items-center rounded-[10px] bg-blood text-cream">
-            <HeartPulse size={16} strokeWidth={2.2} aria-hidden />
-          </span>
-          <p className="font-display text-lg tracking-[-.01em]">{roleLabel[user.role]} workspace</p>
-        </header>
-        <main className="mx-auto max-w-[1250px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10 2xl:max-w-none 2xl:px-14">
-          <CurrentUserProvider value={user}>{children}</CurrentUserProvider>
-        </main>
+        <div className="lg:pl-[264px]">
+          <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-ink/10 bg-paper/85 px-4 py-3.5 backdrop-blur-xl sm:px-5 sm:py-4 lg:hidden">
+            <button type="button" onClick={() => setOpen(true)} aria-label="Open menu" className="grid size-10 place-items-center rounded-full text-ink-muted transition-colors hover:bg-linen hover:text-ink">
+              <Menu size={20} />
+            </button>
+            <span className="relative grid size-8 shrink-0 place-items-center rounded-[10px] bg-blood text-cream">
+              <HeartPulse size={16} strokeWidth={2.2} aria-hidden />
+            </span>
+            <p className="font-display text-lg tracking-[-.01em]">{roleLabel[user.role]} workspace</p>
+            <div className="ml-auto">
+              <NotificationBell />
+            </div>
+          </header>
+          <main className="mx-auto max-w-[1250px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10 2xl:max-w-none 2xl:px-14">
+            <CurrentUserProvider value={user}>{children}</CurrentUserProvider>
+          </main>
+        </div>
       </div>
-    </div>
+    </NotificationProvider>
   );
 }

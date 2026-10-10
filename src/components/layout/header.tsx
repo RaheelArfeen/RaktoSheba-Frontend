@@ -11,6 +11,7 @@ import { publicNav } from "@/lib/site";
 import type { AuthUser } from "@/types";
 import { Logo } from "./logo";
 import { UserMenu } from "./user-menu";
+import { NotificationBell, NotificationProvider } from "@/components/notifications/notification-bell";
 
 // Public site header: logo, pill navigation, emergency + sign-in links, and a slide-out menu on phones.
 export function SiteHeader({ user }: { user?: AuthUser | null }) {
@@ -44,7 +45,7 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
     !href.includes("#") &&
     (pathname === href || pathname.startsWith(`${href}/`));
 
-  return (
+  const content = (
     <header
       className={`sticky top-0 z-40 border-b bg-paper transition-shadow ${
         scrolled
@@ -94,6 +95,7 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
               >
                 <LayoutDashboard size={16} aria-hidden /> Dashboard
               </Link>
+              <NotificationBell />
               <UserMenu user={user} />
             </div>
           ) : (
@@ -111,6 +113,11 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
               >
                 Join free
               </Link>
+            </div>
+          )}
+          {user && (
+            <div className="sm:hidden">
+              <NotificationBell />
             </div>
           )}
           <button
@@ -224,4 +231,7 @@ export function SiteHeader({ user }: { user?: AuthUser | null }) {
       )}
     </header>
   );
+
+  // Signed-in visitors get the notification bell, which needs its provider around the header.
+  return user ? <NotificationProvider role={user.role}>{content}</NotificationProvider> : content;
 }

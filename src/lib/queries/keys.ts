@@ -23,6 +23,7 @@ export type HospitalRequestParams = PageParams & {
 };
 
 export const qk = {
+  notifications: () => ["notifications"] as const,
   admin: {
     all: ["admin"] as const,
     analytics: () => ["admin", "analytics"] as const,

@@ -222,15 +222,21 @@ export type RequestBoardQuery = {
 
 // ---- Notifications, payments, audit --------------------------------------
 
-export type Notification = {
+/** One in-app notification for the bell. (Named so it doesn't clash with the browser's `Notification`.) */
+export type AppNotification = {
   id: string;
   userId: string;
   requestId: string | null;
   channel: string;
+  type: string;
+  title: string;
+  message: string;
+  link: string | null;
   sentAt: string;
   readAt: string | null;
-  request?: Omit<BloodRequest, "requester" | "donation"> | null;
 };
+
+export type NotificationFeed = { items: AppNotification[]; unread: number };
 
 export type Payment = {
   id: string;
