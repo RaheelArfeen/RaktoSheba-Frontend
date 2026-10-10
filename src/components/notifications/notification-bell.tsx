@@ -16,6 +16,7 @@ import {
   Inbox,
   type LucideIcon,
 } from "lucide-react";
+import * as Popover from "@radix-ui/react-popover";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/cn";
@@ -120,34 +121,16 @@ export function NotificationBell({ placement = "below" }: { placement?: "below" 
   const markRead = useMarkNotificationRead();
   const markAll = useMarkAllNotificationsRead();
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
   const go = (n: AppNotification) => {
     setOpen(false);
     navigate(n);
   };
 
-  // Close on outside click or Escape.
-  useEffect(() => {
-    if (!open) return;
-    const onClick = (e: MouseEvent) => ref.current && !ref.current.contains(e.target as Node) && setOpen(false);
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
   const unread = data?.unread ?? 0;
 
   return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-haspopup="dialog"
+    <Popover.Root open={open} onOpenChange={setOpen}>
+      <Popover.Trigger
         aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"}
         className={cn(
           "relative grid size-10 place-items-center rounded-full border transition-colors",
@@ -162,17 +145,16 @@ export function NotificationBell({ placement = "below" }: { placement?: "below" 
             {unread > 9 ? "9+" : unread}
           </span>
         )}
-      </button>
+      </Popover.Trigger>
 
-      {open && (
-        <div
-          role="dialog"
+      <Popover.Portal>
+        <Popover.Content
           aria-label="Notifications"
-          className={cn(
-            "z-50 flex max-h-[min(560px,80vh)] flex-col overflow-hidden rounded-[22px] border border-ink/10 bg-cream text-ink shadow-[0_24px_60px_rgba(62,41,36,.22)]",
-            "fixed inset-x-3 top-[76px] sm:absolute sm:inset-x-auto sm:w-[380px]",
-            placement === "side" ? "sm:top-0 sm:left-full sm:ml-3" : "sm:top-12 sm:right-0",
-          )}
+          side={placement === "side" ? "right" : "bottom"}
+          align={placement === "side" ? "start" : "end"}
+          sideOffset={10}
+          collisionPadding={12}
+          className="animate-fade-in z-50 flex max-h-[min(560px,80vh)] w-[min(380px,calc(100vw-24px))] flex-col overflow-hidden rounded-[22px] border border-ink/10 bg-cream text-ink shadow-[0_24px_60px_rgba(62,41,36,.22)]"
         >
           <div className="flex items-center justify-between gap-3 border-b border-ink/10 px-5 py-4">
             <div>
@@ -251,8 +233,8 @@ export function NotificationBell({ placement = "below" }: { placement?: "below" 
               </ul>
             )}
           </div>
-        </div>
-      )}
-    </div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }
