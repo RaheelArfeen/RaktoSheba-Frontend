@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, CalendarClock, CheckCircle2, Droplets, HeartHandshake, Info, PartyPopper } from "lucide-react";
@@ -220,8 +221,7 @@ function Header({ email, photoUrl }: { email: string; photoUrl?: string | null }
   return (
     <div className="flex items-center gap-4">
       {photoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element -- Cloudinary URL; next/image would need remote config
-        <img src={photoUrl} alt="" className="size-16 shrink-0 rounded-full object-cover ring-4 ring-cream" />
+        <Image src={photoUrl} alt="" width={64} height={64} className="size-16 shrink-0 rounded-full object-cover ring-4 ring-cream" />
       ) : null}
       <div className="min-w-0">
         <Eyebrow>Donor workspace</Eyebrow>

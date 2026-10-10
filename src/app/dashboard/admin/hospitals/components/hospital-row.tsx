@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { BadgeCheck, Building2, ExternalLink, FileText, MapPin } from "lucide-react";
 import { toast } from "sonner";
@@ -54,8 +55,7 @@ export function HospitalRow({ hospital }: { hospital: Hospital }) {
     <div className="flex flex-col gap-4 rounded-[24px] border border-ink/10 bg-cream p-5 transition-colors hover:border-ink/20 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex min-w-0 items-start gap-4">
         {hospital.logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element -- Cloudinary URL; next/image would need remote config
-          <img src={hospital.logoUrl} alt="" className="size-11 shrink-0 rounded-[14px] bg-paper object-contain p-1" />
+          <Image src={hospital.logoUrl} alt="" width={44} height={44} className="size-11 shrink-0 rounded-[14px] bg-paper object-contain p-1" />
         ) : (
           <span className={cn("grid size-11 shrink-0 place-items-center rounded-[14px]", status.pill)}>
             <Building2 size={19} />

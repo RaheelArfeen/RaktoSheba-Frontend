@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Camera, UserRound } from "lucide-react";
 import { toast } from "sonner";
@@ -52,8 +53,15 @@ export function PhotoUpload({ photoUrl }: { photoUrl: string | null }) {
   return (
     <div className="flex flex-col items-start gap-5 rounded-[26px] border border-ink/10 bg-cream p-6 sm:flex-row sm:items-center sm:p-8">
       {shown ? (
-        // eslint-disable-next-line @next/next/no-img-element -- local preview or Cloudinary URL
-        <img src={shown} alt="Your profile photo" className="size-24 shrink-0 rounded-full object-cover ring-4 ring-paper" />
+        <Image
+          src={shown}
+          alt="Your profile photo"
+          width={96}
+          height={96}
+          // A just-picked file is a local blob: preview, which the image optimiser can't fetch.
+          unoptimized={shown.startsWith("blob:")}
+          className="size-24 shrink-0 rounded-full object-cover ring-4 ring-paper"
+        />
       ) : (
         <span className="grid size-24 shrink-0 place-items-center rounded-full bg-linen text-ink-faint">
           <UserRound size={36} />
